@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="EPayroll.LoginView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <ContentPage.Content>
+        <StackLayout
+            HorizontalOptions="Center"
+            Orientation="Vertical"
+            VerticalOptions="Center">
+
+            <Entry Placeholder="EMPLOYEE ID" Text="{Binding EmployeeId}" />
+            <Entry
+                IsPassword="True"
+                Placeholder="PASSWORD"
+                Text="{Binding Password}" />
+            <Label Text="{Binding LoginErrorMessage}" TextColor="Red" />
+            <Button Command="{Binding LoginCommand}" Text="LOGIN" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
