@@ -8,18 +8,27 @@
     mc:Ignorable="d">
 
     <ContentPage.Content>
-        <StackLayout
-            HorizontalOptions="Center"
-            Orientation="Vertical"
-            VerticalOptions="Center">
+        <StackLayout Orientation="Vertical" VerticalOptions="Center">
 
-            <Entry Placeholder="EMPLOYEE ID" Text="{Binding EmployeeId}" />
+            <Label
+                FontSize="30"
+                HorizontalOptions="Center"
+                Text="EPAYROLL"
+                TextColor="{StaticResource MainColor}" />
+
+            <Entry Placeholder="Mã nhân viên" Text="{Binding EmployeeId}" WidthRequest="100" />
             <Entry
                 IsPassword="True"
-                Placeholder="PASSWORD"
+                Placeholder="Mật khẩu"
                 Text="{Binding Password}" />
             <Label Text="{Binding LoginErrorMessage}" TextColor="Red" />
-            <Button Command="{Binding LoginCommand}" Text="LOGIN" />
+
+            <Button
+                BackgroundColor="{StaticResource MainColor}"
+                Command="{Binding LoginCommand}"
+                FontSize="Medium"
+                Text="Đăng nhập"
+                TextColor="White" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

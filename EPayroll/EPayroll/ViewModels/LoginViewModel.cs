@@ -1,8 +1,12 @@
-﻿using EPayroll.Services;
+﻿using EPayroll.Models;
+using EPayroll.Services;
 using EPayroll.ViewModels.Bases;
+using SkiaSharp;
+using SkiaSharp.Views.Forms;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace EPayroll.ViewModels
@@ -22,7 +26,7 @@ namespace EPayroll.ViewModels
         private string _loginErrorMessage;
         #endregion
 
-        #region Binding Values
+        #region Binding Properties
         public string EmployeeId
         {
             get { return _employeeId; }
@@ -43,21 +47,34 @@ namespace EPayroll.ViewModels
         #region Commands
         public Command LoginCommand
         {
-            get {
+            get
+            {
                 return new Command(() =>
                 {
                     if (string.IsNullOrEmpty(_employeeId) || string.IsNullOrEmpty(_password))
                     {
                         LoginErrorMessage = "Employee ID and Password cannot be NULL!!!";
-                    } else
+                    }
+                    else
                     {
-                        if (_accountService.CheckLogin(_employeeId, _password))
+                        try
                         {
-                            LoginErrorMessage = _employeeId + " Success!!!";
+                            AccountViewModel accountViewModel = _accountService.CheckLogin(_employeeId, _password);
+                            if (accountViewModel.IsRemove)
+                            {
+                                LoginErrorMessage = _employeeId + " Remove!!!";
+                            }
+                            else
+                            {
+                                LoginErrorMessage = _employeeId + " Success!!!";
+                            }
                         }
-                        else
+                        catch (Exception e)
                         {
-                            LoginErrorMessage = "Invalid Employee ID or Password!!!";
+                            if (e.Message.Contains("Unauthorized"))
+                            {
+                                LoginErrorMessage = "Invalid Employee ID or Password!!!";
+                            }
                         }
                     }
                 });

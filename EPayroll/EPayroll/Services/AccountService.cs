@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EPayroll.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,14 +7,26 @@ namespace EPayroll.Services
 {
     public class AccountService : IAccountService
     {
-        public bool CheckLogin(string employeeId, string password)
+        private static string base_uri = "http://192.168.1.15:50718/api/Account";
+
+        protected IRequestService _requestService;
+
+        public AccountService(IRequestService requestService)
         {
-            return employeeId.Equals("123");
+            _requestService = requestService;
+        }
+
+        public AccountViewModel CheckLogin(string employeeId, string password)
+        {
+            return _requestService.PostAsync<AccountViewModel>(base_uri + "/login", new AccountLoginModel { 
+                EmployeeId = employeeId,
+                Password = password
+            });
         }
     }
 
     public interface IAccountService
     {
-        bool CheckLogin(string employeeId, string password);
+        AccountViewModel CheckLogin(string employeeId, string password);
     }
 }
