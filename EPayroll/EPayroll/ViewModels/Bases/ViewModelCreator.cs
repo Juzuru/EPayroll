@@ -20,9 +20,10 @@ namespace EPayroll.ViewModels.Bases
             #endregion
 
             #region Register Services
-            _container.Register<IRequestService, RequestService>();
             _container.Register<IAccountService, AccountService>();
             _container.Register<INavigationService, NavigationService>();
+            _container.Register<IPayslipService, PayslipService>();
+            _container.Register<IRequestService, RequestService>();
             #endregion
         }
 

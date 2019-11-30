@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "268073248035",
+    "firebase_url": "https://epayroll-260415.firebaseio.com",
+    "project_id": "epayroll-260415",
+    "storage_bucket": "epayroll-260415.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268073248035:android:a753b101fc888d8e881896",
+        "android_client_info": {
+          "package_name": "com.companyname.epayroll"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "268073248035-dtojhfogqktkj22ohraau5vcd7hfli79.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.companyname.epayroll",
+            "certificate_hash": "cf7d10cf8b26c5f218eca050ccf1d3195fad4a06"
+          }
+        },
+        {
+          "client_id": "268073248035-tdckkmeu0nns6d9l71uqgrtq93ug406h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCL6WOH-KmSejPbSqfkTARVJBS94COigtQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "268073248035-tdckkmeu0nns6d9l71uqgrtq93ug406h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,5 @@
-﻿using EPayroll.Models;
+﻿using EPayroll.FireBases;
+using EPayroll.Models;
 using EPayroll.Services;
 using EPayroll.ViewModels.Bases;
 using SkiaSharp;
@@ -23,88 +24,57 @@ namespace EPayroll.ViewModels
 
 
         #region Previous Values
-        private string _employeeId;
-        private string _password;
         private string _loginErrorMessage;
         #endregion
 
         #region Binding Properties
-        public string EmployeeId
-        {
-            get { return _employeeId; }
-            set { SetValue(ref _employeeId, value); }
-        }
-        public string Password
-        {
-            get { return _password; }
-            set { SetValue(ref _password, value); }
-        }
+        public string Email { get; set; }
+        public string Password { get; set; }
         public string LoginErrorMessage
         {
             get { return _loginErrorMessage; }
             set { SetValue(ref _loginErrorMessage, value); }
         }
-        #endregion
-
-        void OnAuthCompleted(object sender, AuthenticatorCompletedEventArgs e)
+        public ImageSource LogoLogin
         {
-            string s = "";
-            string ss = ";dawdaw".Equals(s).ToString();
+            get { return ImageSource.FromResource("EPayroll.Images.LogoLogin.png"); }
         }
+        #endregion
 
         #region Commands
         public Command LoginCommand
         {
             get
             {
-                return new Command(() =>
+                return new Command(async () =>
                 {
-                    Device.OpenUri(new Uri("https://accounts.google.com/o/oauth2/v2/auth?" +
-                        "scope=email%20profile&" +
-                        "response_type=code&" +
-                        "redirect_uri=com.companyname.epayroll:/oauth2redirect&" +
-                        "client_id=268073248035-dtojhfogqktkj22ohraau5vcd7hfli79.apps.googleusercontent.com"));
-                    //_navigationService.PushAsync(new GoogleLoginView());
-
-                    /*
-                    var uri = "https://accounts.google.com/o/oauth2/v2/auth";
-                    var query = new List<KeyValuePair<string, string>>
+                    if (string.IsNullOrEmpty(Email))
                     {
-                        new KeyValuePair<string, string>("scope", "email,profile"),
-                        new KeyValuePair<string, string>("response_type", "code"),
-                        new KeyValuePair<string, string>("redirect_uri", "https://localhost:44382/api/Accounts/GoogleAuthorizedCode"),
-                        new KeyValuePair<string, string>("client_id","268073248035-dtojhfogqktkj22ohraau5vcd7hfli79.apps.googleusercontent.com")
-                    };
-
-                    
-                    if (string.IsNullOrEmpty(_employeeId) || string.IsNullOrEmpty(_password))
+                        LoginErrorMessage = "Email không được để trống";
+                    }
+                    else if (string.IsNullOrEmpty(Password))
                     {
-                        LoginErrorMessage = "Employee ID and Password cannot be NULL!!!";
+                        LoginErrorMessage = "Mật khẩu không được để trống";
                     }
                     else
                     {
                         try
                         {
-                            AccountViewModel accountViewModel = _accountService.CheckLogin(_employeeId, _password);
-                            if (accountViewModel.IsRemove)
+                            string token = await DependencyService.Get<IFireBaseAuth>().Login(Email, Password);
+                            if (token != null)
                             {
-                                LoginErrorMessage = _employeeId + " Remove!!!";
+                                await _navigationService.PushAsync(new PayslipView());
                             }
                             else
                             {
-                                LoginErrorMessage = _employeeId + " Success!!!";
-                                
+
                             }
                         }
                         catch (Exception e)
                         {
-                            if (e.Message.Contains("Unauthorized"))
-                            {
-                                LoginErrorMessage = "Invalid Employee ID or Password!!!";
-                            }
+                            LoginErrorMessage = "Sai email hoặc mật khẩu";
                         }
                     }
-                    */
                 });
             }
         }
