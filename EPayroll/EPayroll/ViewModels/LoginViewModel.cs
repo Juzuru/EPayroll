@@ -6,6 +6,7 @@ using SkiaSharp.Views.Forms;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Xamarin.Auth;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -15,10 +16,11 @@ namespace EPayroll.ViewModels
     {
         private readonly IAccountService _accountService;
 
-        public LoginViewModel(IAccountService accountService)
+        public LoginViewModel(IAccountService accountService, INavigationService _navigationService) : base (_navigationService)
         {
             _accountService = accountService;
         }
+
 
         #region Previous Values
         private string _employeeId;
@@ -44,6 +46,12 @@ namespace EPayroll.ViewModels
         }
         #endregion
 
+        void OnAuthCompleted(object sender, AuthenticatorCompletedEventArgs e)
+        {
+            string s = "";
+            string ss = ";dawdaw".Equals(s).ToString();
+        }
+
         #region Commands
         public Command LoginCommand
         {
@@ -51,6 +59,24 @@ namespace EPayroll.ViewModels
             {
                 return new Command(() =>
                 {
+                    Device.OpenUri(new Uri("https://accounts.google.com/o/oauth2/v2/auth?" +
+                        "scope=email%20profile&" +
+                        "response_type=code&" +
+                        "redirect_uri=com.companyname.epayroll:/oauth2redirect&" +
+                        "client_id=268073248035-dtojhfogqktkj22ohraau5vcd7hfli79.apps.googleusercontent.com"));
+                    //_navigationService.PushAsync(new GoogleLoginView());
+
+                    /*
+                    var uri = "https://accounts.google.com/o/oauth2/v2/auth";
+                    var query = new List<KeyValuePair<string, string>>
+                    {
+                        new KeyValuePair<string, string>("scope", "email,profile"),
+                        new KeyValuePair<string, string>("response_type", "code"),
+                        new KeyValuePair<string, string>("redirect_uri", "https://localhost:44382/api/Accounts/GoogleAuthorizedCode"),
+                        new KeyValuePair<string, string>("client_id","268073248035-dtojhfogqktkj22ohraau5vcd7hfli79.apps.googleusercontent.com")
+                    };
+
+                    
                     if (string.IsNullOrEmpty(_employeeId) || string.IsNullOrEmpty(_password))
                     {
                         LoginErrorMessage = "Employee ID and Password cannot be NULL!!!";
@@ -67,6 +93,7 @@ namespace EPayroll.ViewModels
                             else
                             {
                                 LoginErrorMessage = _employeeId + " Success!!!";
+                                
                             }
                         }
                         catch (Exception e)
@@ -77,6 +104,7 @@ namespace EPayroll.ViewModels
                             }
                         }
                     }
+                    */
                 });
             }
         }
