@@ -4,40 +4,23 @@ using System.Text;
 
 namespace EPayroll.Models
 {
-    public class AccountViewModel
+    public class AccountModel
     {
-        public string EmployeeId { get; set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
         public bool IsRemove { get; set; }
-    }
-
-    public class AccountCreateModel
-    {
-        public string EmployeeId { get; set; }
-    }
-
-    public class AccountUpdateModel
-    {
-        public string EmployeeId { get; set; }
-        public string Password { get; set; }
-    }
-
-    public class AccountDeleteModel
-    {
-        public string EmployeeId { get; set; }
     }
 
     public class AccountLoginModel
     {
-        public string EmployeeId { get; set; }
-        public string Password { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Picture { get; set; }
     }
 
-    public class AccountAuthorizedModel
+    public class AccountTokenModel
     {
-        public string Name { get; set; }
-        public string ImageUrl { get; set; }
-        public string RoleId { get; set; }
-        public string RoleName { get; set; }
+        public string TokenType { get; set; }
         public string Token { get; set; }
     }
 }

@@ -16,13 +16,6 @@
                 Text="EPAYROLL"
                 TextColor="{StaticResource MainColor}" />
 
-            <Entry Placeholder="Mã nhân viên" Text="{Binding EmployeeId}" WidthRequest="100" />
-            <Entry
-                IsPassword="True"
-                Placeholder="Mật khẩu"
-                Text="{Binding Password}" />
-            <Label Text="{Binding LoginErrorMessage}" TextColor="Red" />
-
             <Button
                 BackgroundColor="{StaticResource MainColor}"
                 Command="{Binding LoginCommand}"

@@ -7,7 +7,7 @@ namespace EPayroll.Services
 {
     public class AccountService : IAccountService
     {
-        private static string base_uri = "http://192.168.1.15:50718/api/Account";
+        private static string base_uri = "http://45.119.83.107:9003/api/Accounts";
 
         protected IRequestService _requestService;
 
@@ -16,17 +16,18 @@ namespace EPayroll.Services
             _requestService = requestService;
         }
 
-        public AccountViewModel CheckLogin(string employeeId, string password)
+        public AccountTokenModel CheckUser(string name, string email, string picture)
         {
-            return _requestService.PostAsync<AccountViewModel>(base_uri + "/login", new AccountLoginModel { 
-                EmployeeId = employeeId,
-                Password = password
+            return _requestService.PostAsync<AccountTokenModel>(base_uri + "/login", new AccountLoginModel { 
+                Name = name,
+                Email = email,
+                Picture = picture
             });
         }
     }
 
     public interface IAccountService
     {
-        AccountViewModel CheckLogin(string employeeId, string password);
+        AccountTokenModel CheckUser(string name, string email, string picture);
     }
 }
