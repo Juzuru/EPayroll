@@ -15,13 +15,6 @@ namespace EPayroll.ViewModels
         public PayslipViewModel(INavigationService navigationService, IAccountService accountService, IPayslipService payslipService) : base(navigationService)
         {
             _payslipService = payslipService;
-
-            AccountTokenModel accountTokenModel = accountService.CheckUser(App.googleUserInfoModel.Name, App.googleUserInfoModel.Email, App.googleUserInfoModel.Picture);
-            App.Token = accountTokenModel.Token;
-            var list=payslipService.GetAll();
-            listPayslip = new ObservableCollection<string>(list);
         }
-
-        ObservableCollection<string> listPayslip;
     }
 }

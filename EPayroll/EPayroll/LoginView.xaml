@@ -10,12 +10,20 @@
     <ContentPage.Content>
         <StackLayout Orientation="Vertical" VerticalOptions="Center">
 
-            <Label
-                FontSize="30"
-                HorizontalOptions="Center"
-                Text="EPAYROLL"
-                TextColor="{StaticResource MainColor}" />
-
+            <Image
+                HeightRequest="200"
+                Source="{Binding LogoLogin}"
+                WidthRequest="200" />
+            <Entry
+                Placeholder="Email"
+                Text="{Binding Email}"
+                TextColor="Black" />
+            <Entry
+                IsPassword="True"
+                Placeholder="Mật khẩu"
+                Text="{Binding Password}"
+                TextColor="Black" />
+            <Label Text="{Binding LoginErrorMessage}" TextColor="Red" />
             <Button
                 BackgroundColor="{StaticResource MainColor}"
                 Command="{Binding LoginCommand}"

@@ -10,15 +10,17 @@ namespace EPayroll.Services
     {
         public async Task PushAsync(Page page)
         {
-            var navigationPage = Application.Current.MainPage as NavigationPage;
-            if (page != null)
+            if (!(Application.Current.MainPage is LoginView))
             {
-                await navigationPage.Navigation.PushAsync(page);
+                var navigationPage = Application.Current.MainPage as NavigationPage;
+                if (page != null)
+                {
+                    await navigationPage.Navigation.PushAsync(page);
+                    return;
+                }
             }
-            else
-            {
-                Application.Current.MainPage = new NavigationPage(page);
-            }
+
+            Application.Current.MainPage = new NavigationPage(page);
         }
     }
 
