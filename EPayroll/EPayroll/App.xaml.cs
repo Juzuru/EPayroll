@@ -10,7 +10,7 @@ namespace EPayroll
         {
             InitializeComponent();
 
-            MainPage = new LoginView();
+            MainPage = new UpdateProfileView();
         }
 
         protected override void OnStart()

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -6,10 +6,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="hana.jpg" />
+    <None Remove="hana_giang_anh.jpg" />
+    <None Remove="ViewModels\hana.jpg" />
+    <None Remove="ViewModels\hana_giang_anh.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Nancy" Version="2.0.0" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.1-rc.170" />
     <PackageReference Include="Xamarin.Forms" Version="4.2.0.709249" />
     <PackageReference Include="Xamarin.Essentials" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="hana.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +31,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Test.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="UpdateProfileView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
