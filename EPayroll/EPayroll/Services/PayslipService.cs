@@ -1,7 +1,9 @@
 ﻿using EPayroll.Models;
+using EPayroll.ServiceModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EPayroll.Services
 {
@@ -16,13 +18,24 @@ namespace EPayroll.Services
             _requestService = requestService;
         }
 
-        public IList<string> GetAll()
+        public async Task<IList<Payslip>> GetAllAsync(Guid employeeId)
         {
-            var listPayslip = _requestService.GetAsync<IList<PaySlipModel>>(base_uri);
-            IList<string> result = new List<string>();
-            for (int i = 0; i < listPayslip.Count; i++)
+            IList<Payslip> result = new List<Payslip>();
+
+            var list = await _requestService.GetAsync<IList<PayslipServiceModel>>(base_uri + "?employeeId=" + employeeId.ToString());
+            if (list != null)
             {
-                result.Add(listPayslip[i].PaySlipCode);
+                for (int i = 0; i < list.Count; i++)
+                {
+                    result.Add(new Payslip { 
+                        Amount = list[i].Amount,
+                        Id = list[i].Id,
+                        OrdinalNumber = i + 1,
+                        Status = list[i].Status,
+                        PaySlipCode = list[i].PaySlipCode
+                    });
+                }
+
             }
 
             return result;
@@ -31,6 +44,6 @@ namespace EPayroll.Services
 
     public interface IPayslipService
     {
-        IList<string> GetAll();
+        Task<IList<Payslip>> GetAllAsync(Guid employeeId);
     }
 }

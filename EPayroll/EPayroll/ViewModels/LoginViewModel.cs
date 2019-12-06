@@ -1,7 +1,9 @@
 ﻿using EPayroll.FireBases;
 using EPayroll.Models;
+using EPayroll.Resources;
 using EPayroll.Services;
 using EPayroll.ViewModels.Bases;
+using Prism.Navigation;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using System;
@@ -15,11 +17,14 @@ namespace EPayroll.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
-        private readonly IAccountService _accountService;
+        private readonly IEmployeeService _employeeService;
 
-        public LoginViewModel(IAccountService accountService, INavigationService _navigationService) : base (_navigationService)
+        public LoginViewModel(IEmployeeService employeeService, INavigationService _navigationService) : base (_navigationService)
         {
-            _accountService = accountService;
+            _employeeService = employeeService;
+
+            Email = "toanldse63050@fpt.edu.vn";
+            Password = "toanld";
         }
 
 
@@ -60,19 +65,31 @@ namespace EPayroll.ViewModels
                     {
                         try
                         {
-                            string token = await DependencyService.Get<IFireBaseAuth>().Login(Email, Password);
-                            if (token != null)
+                            string userUID = await DependencyService.Get<IFireBaseAuth>().Login(Email, Password);
+                            if (userUID != null)
                             {
-                                await _navigationService.PushAsync(new PayslipView());
+                                Guid? employeeId = await _employeeService.CheckUserAsync(Email, userUID);
+                                
+                                if (employeeId != null)
+                                {
+                                    await _navigationService.NavigateAsync(PageName.ListPayslip, new NavigationParameters
+                                    {
+                                        {ParameterName.EmployeeId, employeeId }
+                                    });
+                                }
+                                else
+                                {
+
+                                }
                             }
                             else
                             {
-
+                                LoginErrorMessage = "Sai email hoặc mật khẩu";
                             }
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
-                            LoginErrorMessage = "Sai email hoặc mật khẩu";
+                            
                         }
                     }
                 });

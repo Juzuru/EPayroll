@@ -25,9 +25,10 @@ namespace EPayroll.Droid.FireBases
             try
             {
                 var user = await FirebaseAuth.Instance.SignInWithEmailAndPasswordAsync(email, password);
-                var token = await user.User.GetIdTokenAsync(false);
+                //var token = await user.User.GetIdTokenAsync(false);
+                var userUID = user.User.Uid;
 
-                return token.Token;
+                return userUID;
             }
             catch (FirebaseAuthInvalidUserException)//Wrong email
             {

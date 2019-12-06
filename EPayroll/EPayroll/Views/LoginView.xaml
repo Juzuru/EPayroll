@@ -1,14 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="EPayroll.LoginView"
+    x:Class="EPayroll.Views.LoginView"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+    prism:ViewModelLocator.AutowireViewModel="True"
     mc:Ignorable="d">
 
     <ContentPage.Content>
-        <StackLayout Orientation="Vertical" VerticalOptions="Center">
+        <StackLayout
+            Margin="5"
+            Orientation="Vertical"
+            VerticalOptions="Center">
 
             <Image
                 HeightRequest="200"
