@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="EPayroll.Views.ListPayslipView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converter="clr-namespace:EPayroll.Converters"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+    prism:ViewModelLocator.AutowireViewModel="True"
+    mc:Ignorable="d">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:BackGroundColorConverter x:Key="BackGroundColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical">
+            <Label
+                FontSize="Medium"
+                HorizontalOptions="Center"
+                Text="Danh sách phiếu lương"
+                TextColor="Black" />
+            <CollectionView Margin="5" ItemsSource="{Binding Payslips}">
+                <CollectionView.Header>
+                    <Grid Padding="10" BackgroundColor="{StaticResource MainColor}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.1*" />
+                            <ColumnDefinition Width="0.4*" />
+                            <ColumnDefinition Width="0.3*" />
+                            <ColumnDefinition Width="0.2*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Text="STT" TextColor="White" />
+                        <Label
+                            Grid.Column="1"
+                            HorizontalOptions="Center"
+                            Text="Kì lương"
+                            TextColor="White" />
+                        <Label
+                            Grid.Column="2"
+                            HorizontalOptions="Center"
+                            Text="Số tiền"
+                            TextColor="White" />
+                        <Label
+                            Grid.Column="3"
+                            HorizontalOptions="Center"
+                            Text="Trạng thái"
+                            TextColor="White" />
+                    </Grid>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10" BackgroundColor="{Binding OrdinalNumber, Converter={StaticResource BackGroundColorConverter}}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.1*" />
+                                <ColumnDefinition Width="0.4*" />
+                                <ColumnDefinition Width="0.3*" />
+                                <ColumnDefinition Width="0.2*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Text="{Binding OrdinalNumber}" />
+                            <Label Grid.Column="1" Text="{Binding PaySlipCode}" />
+                            <Label Grid.Column="2" Text="{Binding Amount}" />
+                            <Label Grid.Column="3" Text="{Binding Status}" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

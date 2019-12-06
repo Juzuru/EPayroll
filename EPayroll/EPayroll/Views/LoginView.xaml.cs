@@ -1,23 +1,21 @@
-﻿using EPayroll.ViewModels;
-using EPayroll.ViewModels.Bases;
+﻿using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace EPayroll
+namespace EPayroll.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PayslipView : ContentPage
+    public partial class LoginView : ContentPage
     {
-        public PayslipView()
+        public LoginView()
         {
             InitializeComponent();
-            BindingContext = ViewModelCreator.Create<PayslipViewModel>();
         }
     }
 }
