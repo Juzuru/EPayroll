@@ -13,111 +13,90 @@ namespace EPayroll.Services
         private HttpClient httpClient;
         private HttpResponseMessage response;
 
-        public TResult GetAsync<TResult>(string uri)
+        public async Task<TResult> GetAsync<TResult>(string uri)
         {
             try
             {
-                httpClient = new HttpClient();
-                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                return Task.Run(async () =>
+                using (httpClient = new HttpClient())
                 {
-                    using (response = httpClient.GetAsync(uri).GetAwaiter().GetResult())
+                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    using (response = httpClient.GetAsync(new Uri(uri)).GetAwaiter().GetResult())
                     {
                         return await Task.Run(async () => JsonConvert.DeserializeObject<TResult>(await EnsureSuccessStatusCode(response)));
                     }
-                }).Result;
+                }
             }
             catch (Exception)
             {
                 throw;
-            }
-            finally
-            {
-                Dispose();
             }
         }
 
-        public TResult PostAsync<TResult>(string uri, object dataModel)
+        public async Task<TResult> PostAsync<TResult>(string uri, object dataModel)
         {
             try
             {
-                httpClient = new HttpClient();
-                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                StringContent content = new StringContent(JsonConvert.SerializeObject(dataModel));
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-                return Task.Run(async () =>
+                using (httpClient = new HttpClient())
                 {
-                    using (response = httpClient.PostAsync(uri, content).GetAwaiter().GetResult())
+                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    
+                    StringContent content = new StringContent(JsonConvert.SerializeObject(dataModel));
+                    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                    using (response = httpClient.PostAsync(new Uri(uri), content).GetAwaiter().GetResult())
                     {
                         return await Task.Run(async () => JsonConvert.DeserializeObject<TResult>(await EnsureSuccessStatusCode(response)));
                     }
-                }).Result;
+                }
             }
             catch (Exception)
             {
                 throw;
-            }
-            finally
-            {
-                Dispose();
             }
         }
 
-        public TResult PutAsync<TResult>(string uri, object dataModel)
+        public async Task<TResult> PutAsync<TResult>(string uri, object dataModel)
         {
             try
             {
-                httpClient = new HttpClient();
-                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                var content = new StringContent(JsonConvert.SerializeObject(dataModel));
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-                return Task.Run(async () =>
+                using (httpClient = new HttpClient())
                 {
-                    using (response = httpClient.PutAsync(uri, content).GetAwaiter().GetResult())
+                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    var content = new StringContent(JsonConvert.SerializeObject(dataModel));
+                    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                    using (response = httpClient.PutAsync(new Uri(uri), content).GetAwaiter().GetResult())
                     {
                         return await Task.Run(async () => JsonConvert.DeserializeObject<TResult>(await EnsureSuccessStatusCode(response)));
                     }
-                }).Result;
+                }
             }
             catch (Exception)
             {
 
                 throw;
-            }
-            finally
-            {
-                Dispose();
             }
         }
 
-        public TResult DeleteAsync<TResult>(string uri, object dataModel)
+        public async Task<TResult> DeleteAsync<TResult>(string uri, object dataModel)
         {
             try
             {
-                httpClient = new HttpClient();
-                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                return Task.Run(async () =>
+                using (httpClient = new HttpClient())
                 {
-                    using (var response = httpClient.DeleteAsync(uri).GetAwaiter().GetResult())
+                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    using (var response = httpClient.DeleteAsync(new Uri(uri)).GetAwaiter().GetResult())
                     {
                         return await Task.Run(async () => JsonConvert.DeserializeObject<TResult>(await EnsureSuccessStatusCode(response)));
                     }
-                }).Result;
+                }
             }
             catch (Exception)
             {
-
                 throw;
-            }
-            finally
-            {
-                Dispose();
             }
         }
 
@@ -134,19 +113,13 @@ namespace EPayroll.Services
                 throw new HttpRequestException(content);
             }
         }
-
-        private void Dispose()
-        {
-            if (httpClient != null) httpClient.Dispose();
-            if (response != null) response.Dispose();
-        }
     }
 
     public interface IRequestService
     {
-        TResult GetAsync<TResult>(string uri);
-        TResult PostAsync<TResult>(string uri, object dataModel);
-        TResult PutAsync<TResult>(string uri, object dataModel);
-        TResult DeleteAsync<TResult>(string uri, object dataModel);
+        Task<TResult> GetAsync<TResult>(string uri);
+        Task<TResult> PostAsync<TResult>(string uri, object dataModel);
+        Task<TResult> PutAsync<TResult>(string uri, object dataModel);
+        Task<TResult> DeleteAsync<TResult>(string uri, object dataModel);
     }
 }

@@ -1,11 +1,15 @@
-﻿using EPayroll.Models;
+﻿using EPayroll.FireBases;
+using EPayroll.Models;
+using EPayroll.Resources;
 using EPayroll.Services;
 using EPayroll.ViewModels.Bases;
+using Prism.Navigation;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Xamarin.Auth;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -13,34 +17,32 @@ namespace EPayroll.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
-        private readonly IAccountService _accountService;
+        private readonly IEmployeeService _employeeService;
 
-        public LoginViewModel(IAccountService accountService)
+        public LoginViewModel(IEmployeeService employeeService, INavigationService _navigationService) : base (_navigationService)
         {
-            _accountService = accountService;
+            _employeeService = employeeService;
+
+            Email = "toanldse63050@fpt.edu.vn";
+            Password = "toanld";
         }
 
+
         #region Previous Values
-        private string _employeeId;
-        private string _password;
         private string _loginErrorMessage;
         #endregion
 
         #region Binding Properties
-        public string EmployeeId
-        {
-            get { return _employeeId; }
-            set { SetValue(ref _employeeId, value); }
-        }
-        public string Password
-        {
-            get { return _password; }
-            set { SetValue(ref _password, value); }
-        }
+        public string Email { get; set; }
+        public string Password { get; set; }
         public string LoginErrorMessage
         {
             get { return _loginErrorMessage; }
             set { SetValue(ref _loginErrorMessage, value); }
+        }
+        public ImageSource LogoLogin
+        {
+            get { return ImageSource.FromResource("EPayroll.Images.LogoLogin.png"); }
         }
         #endregion
 
@@ -49,32 +51,45 @@ namespace EPayroll.ViewModels
         {
             get
             {
-                return new Command(() =>
+                return new Command(async () =>
                 {
-                    if (string.IsNullOrEmpty(_employeeId) || string.IsNullOrEmpty(_password))
+                    if (string.IsNullOrEmpty(Email))
                     {
-                        LoginErrorMessage = "Employee ID and Password cannot be NULL!!!";
+                        LoginErrorMessage = "Email không được để trống";
+                    }
+                    else if (string.IsNullOrEmpty(Password))
+                    {
+                        LoginErrorMessage = "Mật khẩu không được để trống";
                     }
                     else
                     {
                         try
                         {
-                            AccountViewModel accountViewModel = _accountService.CheckLogin(_employeeId, _password);
-                            if (accountViewModel.IsRemove)
+                            string userUID = await DependencyService.Get<IFireBaseAuth>().Login(Email, Password);
+                            if (userUID != null)
                             {
-                                LoginErrorMessage = _employeeId + " Remove!!!";
+                                Guid? employeeId = await _employeeService.CheckUserAsync(Email, userUID);
+                                
+                                if (employeeId != null)
+                                {
+                                    await _navigationService.NavigateAsync(PageName.ListPayslip, new NavigationParameters
+                                    {
+                                        {ParameterName.EmployeeId, employeeId }
+                                    });
+                                }
+                                else
+                                {
+
+                                }
                             }
                             else
                             {
-                                LoginErrorMessage = _employeeId + " Success!!!";
+                                LoginErrorMessage = "Sai email hoặc mật khẩu";
                             }
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
-                            if (e.Message.Contains("Unauthorized"))
-                            {
-                                LoginErrorMessage = "Invalid Employee ID or Password!!!";
-                            }
+                            
                         }
                     }
                 });

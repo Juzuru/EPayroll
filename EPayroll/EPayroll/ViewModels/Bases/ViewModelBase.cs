@@ -1,21 +1,36 @@
 ﻿using EPayroll.Services;
+using Prism.Navigation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace EPayroll.ViewModels.Bases
 {
-    public class ViewModelBase : INotifyPropertyChanged
+    public class ViewModelBase : INotifyPropertyChanged, INavigationAware
     {
-        public ViewModelBase()
+        protected readonly INavigationService _navigationService;
+
+        public ViewModelBase(INavigationService navigationService)
+        {
+            _navigationService = navigationService;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public virtual void OnNavigatedFrom(INavigationParameters parameters)
         {
             
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public virtual void OnNavigatedTo(INavigationParameters parameters)
+        {
+            
+        }
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -30,16 +45,5 @@ namespace EPayroll.ViewModels.Bases
                 OnPropertyChanged(propertyName);
             }
         }
-
-        #region Previous Values
-        protected double _basicWidth;
-        #endregion
-
-        #region Binding Properties
-        public double BasicWidth
-        {
-            get { return _basicWidth; }
-        }
-        #endregion
     }
 }

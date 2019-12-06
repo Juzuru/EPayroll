@@ -6,28 +6,31 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="hana.jpg" />
-    <None Remove="hana_giang_anh.jpg" />
-    <None Remove="ViewModels\hana.jpg" />
-    <None Remove="ViewModels\hana_giang_anh.jpg" />
+    <None Remove="Images\LogoLogin.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Images\LogoLogin.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Nancy" Version="2.0.0" />
+    <PackageReference Include="Prism.DryIoc.Forms" Version="7.2.0.1422" />
+    <PackageReference Include="Prism.Forms" Version="7.2.0.1422" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.1-rc.170" />
+    <PackageReference Include="Xamarin.Auth" Version="1.7.0" />
+    <PackageReference Include="Xamarin.Firebase.Core" Version="60.1142.1" />
     <PackageReference Include="Xamarin.Forms" Version="4.2.0.709249" />
     <PackageReference Include="Xamarin.Essentials" Version="1.2.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="hana.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="LoginView.xaml">
+    <EmbeddedResource Update="Views\ListPayslipView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="StartView.xaml">
+    <EmbeddedResource Update="Views\LoginView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Test.xaml">
