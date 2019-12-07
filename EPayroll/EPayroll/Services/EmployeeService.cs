@@ -38,10 +38,30 @@ namespace EPayroll.Services
                 throw e;
             }
         }
+
+        public async Task<EmployeeDetailModel> GetDetail(Guid id)
+        {
+            EmployeeDetailModel employeeDetailModel;
+            try
+            {
+                     employeeDetailModel = await _requestService
+                    .GetAsync<EmployeeDetailModel>(base_uri + "/" + id.ToString());
+                
+            }catch (Exception e)
+            {
+                if (e.Message.Contains("404"))
+                {
+                    return null;
+                }
+                throw e;
+            }
+            return employeeDetailModel;
+        }
     }
 
     public interface IEmployeeService
     {
         Task<Guid?> CheckUserAsync(string email, string userUID);
+        Task<EmployeeDetailModel> GetDetail(Guid id);
     }
 }

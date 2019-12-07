@@ -27,7 +27,7 @@ namespace EPayroll.Services
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception )
             {
                 throw;
             }
