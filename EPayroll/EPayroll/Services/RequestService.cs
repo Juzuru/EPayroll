@@ -23,13 +23,16 @@ namespace EPayroll.Services
 
                     using (response = httpClient.GetAsync(new Uri(uri)).GetAwaiter().GetResult())
                     {
-                        return await Task.Run(async () => JsonConvert.DeserializeObject<TResult>(await EnsureSuccessStatusCode(response)));
+                        return await Task.Factory.StartNew(()=> {
+                            string content = response.Content.ReadAsStringAsync().Result;
+                            return JsonConvert.DeserializeObject<TResult>(content); 
+                        });
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                throw new HttpRequestException(e.Message);
             }
         }
 
@@ -41,18 +44,21 @@ namespace EPayroll.Services
                 {
                     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     
-                    StringContent content = new StringContent(JsonConvert.SerializeObject(dataModel));
-                    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    StringContent stringContent = new StringContent(JsonConvert.SerializeObject(dataModel));
+                    stringContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                    using (response = httpClient.PostAsync(new Uri(uri), content).GetAwaiter().GetResult())
+                    using (response = httpClient.PostAsync(new Uri(uri), stringContent).GetAwaiter().GetResult())
                     {
-                        return await Task.Run(async () => JsonConvert.DeserializeObject<TResult>(await EnsureSuccessStatusCode(response)));
+                        return await Task.Factory.StartNew(() => {
+                            string content = response.Content.ReadAsStringAsync().Result;
+                            return JsonConvert.DeserializeObject<TResult>(content);
+                        });
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                throw new HttpRequestException(e.Message);
             }
         }
 
@@ -64,19 +70,21 @@ namespace EPayroll.Services
                 {
                     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var content = new StringContent(JsonConvert.SerializeObject(dataModel));
-                    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    StringContent stringContent = new StringContent(JsonConvert.SerializeObject(dataModel));
+                    stringContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                    using (response = httpClient.PutAsync(new Uri(uri), content).GetAwaiter().GetResult())
+                    using (response = httpClient.PutAsync(new Uri(uri), stringContent).GetAwaiter().GetResult())
                     {
-                        return await Task.Run(async () => JsonConvert.DeserializeObject<TResult>(await EnsureSuccessStatusCode(response)));
+                        return await Task.Factory.StartNew(() => {
+                            string content = response.Content.ReadAsStringAsync().Result;
+                            return JsonConvert.DeserializeObject<TResult>(content);
+                        });
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-                throw;
+                throw new HttpRequestException(e.Message);
             }
         }
 
@@ -90,27 +98,16 @@ namespace EPayroll.Services
 
                     using (var response = httpClient.DeleteAsync(new Uri(uri)).GetAwaiter().GetResult())
                     {
-                        return await Task.Run(async () => JsonConvert.DeserializeObject<TResult>(await EnsureSuccessStatusCode(response)));
+                        return await Task.Factory.StartNew(() => {
+                            string content = response.Content.ReadAsStringAsync().Result;
+                            return JsonConvert.DeserializeObject<TResult>(content);
+                        });
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
-            }
-        }
-
-        private async Task<string> EnsureSuccessStatusCode(HttpResponseMessage response)
-        {
-            string content = await response.Content.ReadAsStringAsync();
-            try
-            {
-                response.EnsureSuccessStatusCode();
-                return content;
-            }
-            catch (Exception)
-            {
-                throw new HttpRequestException(content);
+                throw new HttpRequestException(e.Message);
             }
         }
     }

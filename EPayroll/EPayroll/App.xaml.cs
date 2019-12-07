@@ -27,7 +27,7 @@ namespace EPayroll
             //  .NavigateAsync("EPayroll:///" + PageName.Navigation + "/" + PageName.Login);
             Container.Resolve<INavigationService>()
                 .NavigateAsync("EPayroll:///" + PageName.ListPayslip, new NavigationParameters {
-                    {ParameterName.EmployeeId, new Guid("6bd89f97-d2a6-412e-eb90-08d7762cb897") }
+                    {ParameterName.EmployeeId, new Guid("515f1407-f98f-4f15-8459-08d778b630cb") }
                 });
         }
 
