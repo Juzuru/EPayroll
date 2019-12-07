@@ -1,9 +1,9 @@
-
 ﻿using EPayroll.ServiceModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+
 namespace EPayroll.Services
 {
     public class EmployeeService : IEmployeeService
@@ -16,6 +16,7 @@ namespace EPayroll.Services
         {
             _requestService = requestService;
         }
+
         public async Task<Guid?> CheckUserAsync(string email, string userUID)
         {
             try
@@ -38,30 +39,10 @@ namespace EPayroll.Services
                 throw e;
             }
         }
-
-        public async Task<EmployeeDetailModel> GetDetail(Guid id)
-        {
-            EmployeeDetailModel employeeDetailModel;
-            try
-            {
-                     employeeDetailModel = await _requestService
-                    .GetAsync<EmployeeDetailModel>(base_uri + "/" + id.ToString());
-                
-            }catch (Exception e)
-            {
-                if (e.Message.Contains("404"))
-                {
-                    return null;
-                }
-                throw e;
-            }
-            return employeeDetailModel;
-        }
     }
 
     public interface IEmployeeService
     {
         Task<Guid?> CheckUserAsync(string email, string userUID);
-        Task<EmployeeDetailModel> GetDetail(Guid id);
     }
 }

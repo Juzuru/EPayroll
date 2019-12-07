@@ -55,7 +55,7 @@ namespace EPayroll.ViewModels
 
                     IsLoading = false;
                 }
-                catch (Exception )
+                catch (Exception e)
                 {
 
                 }
