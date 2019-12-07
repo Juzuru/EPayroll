@@ -30,7 +30,9 @@ namespace EPayroll.Services
                     }
                 }
             }
-            catch (Exception e)
+
+            catch (Exception e )
+
             {
                 throw new HttpRequestException(e.Message);
             }

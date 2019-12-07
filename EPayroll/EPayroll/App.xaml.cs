@@ -22,15 +22,16 @@ namespace EPayroll
         protected override void OnInitialized()
         {
             InitializeComponent();
-
             //Container.Resolve<INavigationService>()
             //  .NavigateAsync("EPayroll:///" + PageName.Navigation + "/" + PageName.Login);
+            //Container.Resolve<INavigationService>()
+            //   .NavigateAsync("EPayroll:///" + PageName.ListPayslip, new NavigationParameters {
+            //       {ParameterName.EmployeeId, new Guid("6bd89f97-d2a6-412e-eb90-08d7762cb897") }
+            //   });
             Container.Resolve<INavigationService>()
-                .NavigateAsync("EPayroll:///" + PageName.ListPayslip, new NavigationParameters {
-                    {ParameterName.EmployeeId, new Guid("515f1407-f98f-4f15-8459-08d778b630cb") }
-                });
+               .NavigateAsync("EPayroll:///" + PageName.UpdateProfile);
         }
-
+            
         protected override void RegisterTypes(IContainerRegistry containerRegistry) 
         {
             #region Services
@@ -42,6 +43,7 @@ namespace EPayroll
             #region Navigations
             containerRegistry.RegisterForNavigation<ListPayslipView, ListPayslipViewModel>(PageName.ListPayslip);
             containerRegistry.RegisterForNavigation<LoginView, LoginViewModel>(PageName.Login);
+            containerRegistry.RegisterForNavigation<UpdateProfileView, UpdateProfileViewModel>(PageName.UpdateProfile);
             containerRegistry.RegisterForNavigation<NavigationPage>(PageName.Navigation);
             #endregion
         }

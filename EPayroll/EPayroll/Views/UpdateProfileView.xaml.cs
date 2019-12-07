@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace EPayroll
+namespace EPayroll.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PayslipsView : ContentPage
+    public partial class UpdateProfileView : ContentPage
     {
-        public PayslipsView()
+        public UpdateProfileView()
         {
             InitializeComponent();
         }
