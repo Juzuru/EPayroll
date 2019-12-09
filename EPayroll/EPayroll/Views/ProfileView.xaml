@@ -1,40 +1,38 @@
-﻿ @@ -0,0 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="EPayroll.Views.ProfileView"
-             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
-             prism:ViewModelLocator.AutowireViewModel="True">
-
+              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+    prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="EPayroll.Views.ProfileView">
     <ContentPage.Content>
         <StackLayout Orientation="Vertical" BackgroundColor="Aqua">
             <StackLayout Orientation="Horizontal"
                          >
-                <Label Text="Thong Tin Tai Khoan" FontSize="30" FontAttributes="Bold" TextColor="Black" HorizontalOptions="CenterAndExpand"/>
+                <Label Text="Thông Tin Tài Khoản" FontSize="Large" FontAttributes="Bold" TextColor="Black" HorizontalOptions="CenterAndExpand"/>
             </StackLayout>
             <StackLayout Orientation="Horizontal"
                         >
                 <Image Source="{Binding ImageSource}"  HorizontalOptions="CenterAndExpand"></Image>
             </StackLayout>
             <StackLayout Orientation="Vertical" BackgroundColor="Aqua">
-                <Label Text="{Binding Name}" FontSize="24" TextColor="Black" FontAttributes="Bold"/>
-                <Label Text="{Binding Position}" FontSize="18"/>
+                <Label Text="{Binding Name}" FontSize="30" TextColor="White" FontAttributes="Bold"/>
+                <Label Text="{Binding Position}" FontSize="Medium"/>
             </StackLayout>
             <Grid>
                 <!-- Grid.Row="0" and Grid.Column="0" can be omitted -->
                 <!-- Left collumn-->
-                <Label Grid.Column="0" Grid.Row="0" Text="Tuoi: " Margin="5" TextColor="Black" FontAttributes="Bold" FontSize="Body"/>
+                <Label Grid.Column="0" Grid.Row="0" Text="Tuổi: " Margin="5" TextColor="Black" FontAttributes="Bold" FontSize="Body"/>
 
-                <Label Grid.Column="0" Grid.Row="1" Text="Gioi Tinh: " Margin="5" TextColor="Black"   FontAttributes="Bold" FontSize="Body"/>
+                <Label Grid.Column="0" Grid.Row="1" Text="Giới Tính: " Margin="5" TextColor="Black"   FontAttributes="Bold" FontSize="Body"/>
 
                 <Label Grid.Column="0" Grid.Row="2" Text="CMND: " Margin="5" TextColor="Black"    FontAttributes="Bold" FontSize="Body"/>
 
-                <Label Grid.Column="0" Grid.Row="3" Text="Bac Luong " Margin="5" TextColor="Black" FontAttributes="Bold"  FontSize="Body"/>
+                <Label Grid.Column="0" Grid.Row="3" Text="Bậc Lương:" Margin="5" TextColor="Black" FontAttributes="Bold"  FontSize="Body"/>
 
-                <Label Grid.Column="0" Grid.Row="4" Text="Loai Luong" Margin="5" TextColor="Black" FontAttributes="Bold"  FontSize="Body"/>
+                <Label Grid.Column="0" Grid.Row="4" Text="Loại Lương:" Margin="5" TextColor="Black" FontAttributes="Bold"  FontSize="Body"/>
 
                 <!-- Right collumn-->
                 <Label Grid.Column="1" Grid.Row="0" x:Name="Tuoi" Text="{Binding Age}"/>
