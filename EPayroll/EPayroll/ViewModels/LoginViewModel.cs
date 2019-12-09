@@ -23,26 +23,36 @@ namespace EPayroll.ViewModels
         {
             _employeeService = employeeService;
 
-            Email = "toanldse63050@fpt.edu.vn";
-            Password = "toanld";
+            _email = "toanldse63050@fpt.edu.vn";
+            _password = "toanld";
         }
 
 
         #region Previous Values
         private string _loginErrorMessage;
+        private string _email;
+        private string _password;
         #endregion
 
         #region Binding Properties
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string Email
+        {
+            get => _email;
+            set => SetValue(ref _email, value);
+        }
+        public string Password
+        {
+            get => _password;
+            set => SetValue(ref _password, value);
+        }
         public string LoginErrorMessage
         {
-            get { return _loginErrorMessage; }
-            set { SetValue(ref _loginErrorMessage, value); }
+            get => _loginErrorMessage;
+            set => SetValue(ref _loginErrorMessage, value);
         }
         public ImageSource LogoLogin
         {
-            get { return ImageSource.FromResource("EPayroll.Images.LogoLogin.png"); }
+            get => ImageSource.FromResource("EPayroll.Images.LogoApp.png");
         }
         #endregion
 
@@ -68,14 +78,17 @@ namespace EPayroll.ViewModels
                             string userUID = await DependencyService.Get<IFireBaseAuth>().Login(Email, Password);
                             if (userUID != null)
                             {
-                                Guid? employeeId = await _employeeService.CheckUserAsync(Email, userUID);
+                                Guid? employeeId = _employeeService.CheckUser(Email, userUID);
                                 
                                 if (employeeId != null)
                                 {
-                                    await _navigationService.NavigateAsync(PageName.ListPayslip, new NavigationParameters
-                                    {
-                                        {ParameterName.EmployeeId, employeeId }
-                                    });
+                                    Employee employee = _employeeService.GetById(new Guid(employeeId.ToString()));
+                                    employee.UserUID = userUID;
+                                    employee.Email = Email;
+                                    employee.EmployeeCode = Email.Substring(0, Email.IndexOf("@"));
+                                    AppResource.Add(ParameterName.Employee, employee);
+
+                                    await _navigationService.NavigateAsync("EPayroll:///" + PageName.Navigation + "/" + PageName.ListPayslip);
                                 }
                                 else
                                 {
@@ -96,5 +109,17 @@ namespace EPayroll.ViewModels
             }
         }
         #endregion
+
+        public override void OnAppearing()
+        {
+            //Email = AppResource.Get<string>(ParameterName.Email);
+            //Password = AppResource.Get<string>(ParameterName.Password);
+        }
+
+        public override void OnDisappearing()
+        {
+            AppResource.Add(ParameterName.Email, _email);
+            AppResource.Add(ParameterName.Password, _password);
+        }
     }
 }

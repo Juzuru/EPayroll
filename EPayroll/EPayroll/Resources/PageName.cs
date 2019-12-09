@@ -9,5 +9,6 @@ namespace EPayroll.Resources
         public static string Navigation = "Navigation";
         public static string Login = "Login";
         public static string ListPayslip = "Payslip";
+        public static string PayslipDetail = "PayslipDetail";
     }
 }

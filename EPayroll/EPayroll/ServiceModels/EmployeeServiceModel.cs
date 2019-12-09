@@ -16,4 +16,11 @@ namespace EPayroll.ServiceModels
         public string TokenType { get; set; }
         public Guid? Id { get; set; }
     }
+
+    public class EmployeeServiceViewModel
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public PositionServiceModel Position { get; set; }
+    }
 }

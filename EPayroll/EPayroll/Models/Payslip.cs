@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace EPayroll.Models
@@ -11,5 +12,12 @@ namespace EPayroll.Models
         public int OrdinalNumber { get; set; }
         public float Amount { get; set; }
         public string Status { get; set; }
+    }
+
+    public class PayslipDetail
+    {
+        public float Amount { get; set; }
+        public PayPeriod PayPeriod { get; set; }
+        public ObservableCollection<PayItem> PayItems { get; set; }
     }
 }

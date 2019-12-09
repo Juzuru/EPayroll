@@ -19,47 +19,70 @@ namespace EPayroll.ViewModels
         public ListPayslipViewModel(INavigationService navigationService, IPayslipService payslipService) : base(navigationService)
         {
             _payslipService = payslipService;
-            Payslips = new ObservableCollection<Payslip>();
         }
 
         #region Previous Properties
         private bool _isLoading = true;
+        private Payslip _selectedPayslip;
+        private ObservableCollection<Payslip> _payslips;
         #endregion
 
         #region Binding Properties
         public bool IsLoading
         {
-            get { return _isLoading; }
-            set { SetValue(ref _isLoading, value); }
+            get => _isLoading;
+            set => SetValue(ref _isLoading, value);
+        }
+        public Payslip SelectedPayslip
+        {
+            get => _selectedPayslip;
+            set
+            {
+                _selectedPayslip = value;
+
+                if (_selectedPayslip.OrdinalNumber == -10)
+                    _selectedPayslip = _payslips[_payslips.Count - 2];
+                else _selectedPayslip = _payslips[_selectedPayslip.OrdinalNumber - 2];
+                
+                AppResource.Replace(ParameterName.PayslipId, _selectedPayslip.Id);
+                SetValue(ref _selectedPayslip, null);
+
+                _navigationService.NavigateAsync(PageName.PayslipDetail);
+            }
+        }
+        public ObservableCollection<Payslip> Payslips
+        {
+            get => _payslips;
+            set => SetValue(ref _payslips, value);
         }
         #endregion
 
-        public ObservableCollection<Payslip> Payslips { get; private set; }
-
-        public override void OnNavigatedTo(INavigationParameters parameters)
+        public override void OnAppearing()
         {
-            Task.Run(async () => 
+            if (AppResource.Get(ParameterName.ListPayslip, out ObservableCollection<Payslip> value))
             {
-                try
+                Payslips = value;
+            }
+            else
+            {
+                Guid employeeId = AppResource.Get<Employee>(ParameterName.Employee).Id;
+                
+                var list = _payslipService.GetAll(employeeId);
+                list.Add(new Payslip
                 {
-                    Guid employeeId = (Guid)parameters[ParameterName.EmployeeId];
-                    var list = await _payslipService.GetAllAsync(employeeId);
+                    OrdinalNumber = -10,
+                    PaySlipCode = "Kì lương",
+                    Amount = -11,
+                    Status = "Trạng thái"
+                });
 
-                    Device.BeginInvokeOnMainThread(() => 
-                    {
-                        for (int i = 0; i < list.Count; i++)
-                        {
-                            Payslips.Add(list[i]);
-                        }
-                    });
+                Payslips = list;
+            }
+        }
 
-                    IsLoading = false;
-                }
-                catch (Exception e)
-                {
-
-                }
-            });
+        public override void OnDisappearing()
+        {
+            AppResource.Add(ParameterName.ListPayslip, _payslips);
         }
     }
 }

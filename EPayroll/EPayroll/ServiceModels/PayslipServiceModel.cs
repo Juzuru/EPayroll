@@ -11,4 +11,11 @@ namespace EPayroll.ServiceModels
         public string Status { get; set; }
         public float Amount { get; set; }
     }
+
+    public class PayslipDetailServiceModel
+    {
+        public float Amount { get; set; }
+        public PayPeriodServiceModel PayPeriod { get; set; }
+        public IList<GroupPayItemServiceModel> GroupPayItems { get; set; }
+    }
 }

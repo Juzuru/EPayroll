@@ -13,21 +13,31 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <converter:BackGroundColorConverter x:Key="BackGroundColorConverter" />
+            <converter:TextColorConverter x:Key="TextColorConverter" />
+            <converter:TextConverter x:Key="TextConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.Content>
         <StackLayout Orientation="Vertical">
             <Label
-                FontSize="Medium"
+                FontSize="Large"
+                HeightRequest="50"
                 HorizontalOptions="Center"
+                LineHeight="2"
                 Text="Danh sách phiếu lương"
-                TextColor="Black" />
-            <CollectionView Margin="5" ItemsSource="{Binding Payslips}">
+                TextColor="Black"
+                VerticalTextAlignment="Center" />
+            <CollectionView
+                x:Name="PayslipsCollectionView"
+                Margin="5"
+                ItemsSource="{Binding Payslips}"
+                SelectedItem="{Binding SelectedPayslip}"
+                SelectionMode="Single">
                 <CollectionView.Header>
-                    <Grid Padding="10" BackgroundColor="{StaticResource MainColor}">
+                    <Grid Padding="10,5,10,5" BackgroundColor="{StaticResource MainColor}">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="30" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.1*" />
@@ -35,29 +45,42 @@
                             <ColumnDefinition Width="0.3*" />
                             <ColumnDefinition Width="0.2*" />
                         </Grid.ColumnDefinitions>
-                        <Label Text="STT" TextColor="White" />
+                        <Label
+                            FontSize="{StaticResource TextNormal}"
+                            HorizontalTextAlignment="Start"
+                            Text="STT"
+                            TextColor="Black"
+                            VerticalTextAlignment="Center" />
                         <Label
                             Grid.Column="1"
-                            HorizontalOptions="Center"
+                            FontSize="{StaticResource TextNormal}"
+                            HorizontalTextAlignment="Start"
                             Text="Kì lương"
-                            TextColor="White" />
+                            TextColor="Black"
+                            VerticalTextAlignment="Center" />
                         <Label
                             Grid.Column="2"
+                            FontSize="{StaticResource TextNormal}"
                             HorizontalOptions="Center"
+                            HorizontalTextAlignment="Center"
                             Text="Số tiền"
-                            TextColor="White" />
+                            TextColor="Black"
+                            VerticalTextAlignment="Center" />
                         <Label
                             Grid.Column="3"
+                            FontSize="{StaticResource TextNormal}"
                             HorizontalOptions="Center"
+                            HorizontalTextAlignment="Center"
                             Text="Trạng thái"
-                            TextColor="White" />
+                            TextColor="Black"
+                            VerticalTextAlignment="Center" />
                     </Grid>
                 </CollectionView.Header>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid Padding="10" BackgroundColor="{Binding OrdinalNumber, Converter={StaticResource BackGroundColorConverter}}">
+                        <Grid Padding="10,5,10,5" BackgroundColor="{Binding OrdinalNumber, Converter={StaticResource BackGroundColorConverter}}">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="30" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="0.1*" />
@@ -65,15 +88,37 @@
                                 <ColumnDefinition Width="0.3*" />
                                 <ColumnDefinition Width="0.2*" />
                             </Grid.ColumnDefinitions>
-                            <Label Text="{Binding OrdinalNumber}" />
-                            <Label Grid.Column="1" Text="{Binding PaySlipCode}" />
-                            <Label Grid.Column="2" Text="{Binding Amount}" />
-                            <Label Grid.Column="3" Text="{Binding Status}" />
+                            <Label
+                                FontSize="{StaticResource TextNormal}"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding OrdinalNumber, Converter={StaticResource TextConverter}}"
+                                TextColor="Black"
+                                VerticalTextAlignment="Center" />
+                            <Label
+                                Grid.Column="1"
+                                FontSize="{StaticResource TextNormal}"
+                                HorizontalTextAlignment="Start"
+                                Text="{Binding PaySlipCode}"
+                                TextColor="Black"
+                                VerticalTextAlignment="Center" />
+                            <Label
+                                Grid.Column="2"
+                                FontSize="{StaticResource TextNormal}"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding Amount, Converter={StaticResource TextConverter}}"
+                                TextColor="Black"
+                                VerticalTextAlignment="Center" />
+                            <Label
+                                Grid.Column="3"
+                                FontSize="{StaticResource TextNormal}"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding Status}"
+                                TextColor="{Binding Status, Converter={StaticResource TextColorConverter}}"
+                                VerticalTextAlignment="Center" />
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

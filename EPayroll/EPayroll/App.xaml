@@ -12,6 +12,9 @@
         <ResourceDictionary>
             <!--  MainColor RGB:69, 190, 171  -->
             <Color x:Key="MainColor">#45beab</Color>
+            <Color x:Key="DensityMainColor">#00a08d</Color>
+            <Color x:Key="Gray">#C8C8C8</Color>
+            <x:Double x:Key="TextNormal">15</x:Double>
         </ResourceDictionary>
     </Application.Resources>
 </prism:PrismApplication>

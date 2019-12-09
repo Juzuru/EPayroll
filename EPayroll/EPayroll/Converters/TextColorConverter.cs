@@ -6,13 +6,14 @@ using Xamarin.Forms;
 
 namespace EPayroll.Converters
 {
-    public class BackGroundColorConverter : IValueConverter
+    public class TextColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((int)value < 0)
-                return "#45beab";
-            return (int)value % 2 == 0 ? "#C8C8C8" : "#FFFFFF";
+            if (((string)value).Equals("Đã trả")) return Color.FromHex("#00A08D");
+            else if (((string)value).Equals("Chưa trả")) return Color.FromHex("#FF0000");
+            else if (((string)value).Equals("Trạng thái")) return Color.FromHex("#FFFFFF");
+            else return Color.FromHex("#FF9900");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

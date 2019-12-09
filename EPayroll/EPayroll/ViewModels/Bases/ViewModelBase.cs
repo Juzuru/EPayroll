@@ -1,4 +1,5 @@
 ﻿using EPayroll.Services;
+using Prism.AppModel;
 using Prism.Navigation;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using Xamarin.Forms;
 
 namespace EPayroll.ViewModels.Bases
 {
-    public class ViewModelBase : INotifyPropertyChanged, INavigationAware
+    public class ViewModelBase : INotifyPropertyChanged, INavigationAware, IPageLifecycleAware
     {
         protected readonly INavigationService _navigationService;
 
@@ -21,6 +22,16 @@ namespace EPayroll.ViewModels.Bases
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public virtual void OnAppearing()
+        {
+            
+        }
+
+        public virtual void OnDisappearing()
+        {
+            
+        }
 
         public virtual void OnNavigatedFrom(INavigationParameters parameters)
         {

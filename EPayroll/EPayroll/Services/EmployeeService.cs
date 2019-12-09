@@ -1,4 +1,5 @@
-﻿using EPayroll.ServiceModels;
+﻿using EPayroll.Models;
+using EPayroll.ServiceModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,12 +18,12 @@ namespace EPayroll.Services
             _requestService = requestService;
         }
 
-        public async Task<Guid?> CheckUserAsync(string email, string userUID)
+        public Guid? CheckUser(string email, string userUID)
         {
             try
             {
-                EmployeeAuthorizedModel model = await _requestService
-                .PostAsync<EmployeeAuthorizedModel>(base_uri + "/check-user", new EmployeeCheckUserModel
+                EmployeeAuthorizedModel model = _requestService
+                    .Post<EmployeeAuthorizedModel>(base_uri + "/check-user", new EmployeeCheckUserModel
                 {
                     Email = email,
                     UserUID = userUID
@@ -39,10 +40,22 @@ namespace EPayroll.Services
                 throw e;
             }
         }
+
+        public Employee GetById(Guid employeeId)
+        {
+            EmployeeServiceViewModel model = _requestService.Get<EmployeeServiceViewModel>(base_uri + "/" + employeeId.ToString());
+            return new Employee
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Position = model.Position.Name
+            };
+        }
     }
 
     public interface IEmployeeService
     {
-        Task<Guid?> CheckUserAsync(string email, string userUID);
+        Employee GetById(Guid employeeId);
+        Guid? CheckUser(string email, string userUID);
     }
 }

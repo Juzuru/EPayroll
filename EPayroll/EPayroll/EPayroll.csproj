@@ -6,11 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Images\LogoLogin.png" />
+    <None Remove="Images\LogoApp.png" />
+    <None Remove="Images\LogoStart.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Images\LogoLogin.png">
+    <EmbeddedResource Include="Images\LogoStart.png" />
+    <EmbeddedResource Include="Images\LogoApp.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
@@ -34,6 +36,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Test.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\PayslipDetailView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

@@ -6,13 +6,11 @@ using Xamarin.Forms;
 
 namespace EPayroll.Converters
 {
-    public class BackGroundColorConverter : IValueConverter
+    public class FontAttributesConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((int)value < 0)
-                return "#45beab";
-            return (int)value % 2 == 0 ? "#C8C8C8" : "#FFFFFF";
+            return (int)value < 0 ? FontAttributes.Bold : FontAttributes.None;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
