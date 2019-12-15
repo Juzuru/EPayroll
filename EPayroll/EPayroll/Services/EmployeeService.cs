@@ -78,6 +78,5 @@ namespace EPayroll.Services
         Guid? CheckUser(string email, string userUID);
         EmployeeDetailModel GetDetail(Guid id);
         Employee GetById(Guid employeeId);
-        Guid? CheckUser(string email, string userUID);
     }
 }

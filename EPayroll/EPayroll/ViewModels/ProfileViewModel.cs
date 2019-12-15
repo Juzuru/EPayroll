@@ -17,17 +17,15 @@ namespace EPayroll.ViewModels
         public ProfileViewModel(IEmployeeService employeeService, INavigationService navigationService) : base(navigationService)
         {
             _employeeService = employeeService;
-            Task.Run(async () =>
-            {
-                var details = await employeeService.GetDetail(new Guid("515f1407-f98f-4f15-8459-08d778b630cb"));
-                Name = details.Name;
-                Position = details.Position.Name;
-                Age = details.Age;
-                Gender = details.Gender;
-                IdentifyNumber = details.IdentifyNumber;
-                Mode = details.SalaryMode.Mode;
-                Level = details.SalaryLevel.Level;
-            });
+
+            var details = employeeService.GetDetail(new Guid("515f1407-f98f-4f15-8459-08d778b630cb"));
+            Name = details.Name;
+            Position = details.Position.Name;
+            Age = details.Age;
+            Gender = details.Gender;
+            IdentifyNumber = details.IdentifyNumber;
+            Mode = details.SalaryMode.Mode;
+            Level = details.SalaryLevel.Level;
         }
 
         private string _name;
