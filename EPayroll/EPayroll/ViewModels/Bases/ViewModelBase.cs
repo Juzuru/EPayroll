@@ -1,17 +1,19 @@
 ﻿using EPayroll.Services;
+using Prism.AppModel;
 using Prism.Navigation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace EPayroll.ViewModels.Bases
 {
-    public class ViewModelBase : INotifyPropertyChanged, INavigationAware
+    public class ViewModelBase : INotifyPropertyChanged, INavigationAware, IPageLifecycleAware
     {
         protected readonly INavigationService _navigationService;
 
@@ -21,6 +23,34 @@ namespace EPayroll.ViewModels.Bases
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        #region Previous Properties
+        protected bool _isLoading = true;
+        protected double _opacity = 0;
+        #endregion
+
+        #region Binding Properties
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => SetValue(ref _isLoading, value);
+        }
+        public double Opacity
+        {
+            get => _opacity;
+            set => SetValue(ref _opacity, value);
+        }
+        #endregion
+
+        public virtual void OnAppearing()
+        {
+            
+        }
+
+        public virtual void OnDisappearing()
+        {
+            
+        }
 
         public virtual void OnNavigatedFrom(INavigationParameters parameters)
         {

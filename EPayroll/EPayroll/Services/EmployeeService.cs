@@ -1,4 +1,5 @@
-﻿using EPayroll.ServiceModels;
+﻿using EPayroll.Models;
+using EPayroll.ServiceModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,12 +18,12 @@ namespace EPayroll.Services
             _requestService = requestService;
         }
 
-        public async Task<Guid?> CheckUserAsync(string email, string userUID)
+        public Guid? CheckUser(string email, string userUID)
         {
             try
             {
-                EmployeeAuthorizedModel model = await _requestService
-                .PostAsync<EmployeeAuthorizedModel>(base_uri + "/check-user", new EmployeeCheckUserModel
+                EmployeeAuthorizedModel model = _requestService
+                    .Post<EmployeeAuthorizedModel>(base_uri + "/check-user", new EmployeeCheckUserModel
                 {
                     Email = email,
                     UserUID = userUID
@@ -40,13 +41,13 @@ namespace EPayroll.Services
             }
         }
 
-        public async Task<EmployeeDetailModel> GetDetail(Guid id)
+        public EmployeeDetailModel GetDetail(Guid id)
         {
             EmployeeDetailModel employeeDetailModel;
             try
             {
-                employeeDetailModel = await _requestService
-               .GetAsync<EmployeeDetailModel>(base_uri + "/" + id.ToString());
+                employeeDetailModel = _requestService
+                    .Get<EmployeeDetailModel>(base_uri + "/" + id.ToString());
 
             }
             catch (Exception e)
@@ -59,11 +60,24 @@ namespace EPayroll.Services
             }
             return employeeDetailModel;
         }
+
+        public Employee GetById(Guid employeeId)
+        {
+            EmployeeServiceViewModel model = _requestService.Get<EmployeeServiceViewModel>(base_uri + "/" + employeeId.ToString());
+            return new Employee
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Position = model.Position.Name
+            };
+        }
     }
 
     public interface IEmployeeService
     {
-        Task<Guid?> CheckUserAsync(string email, string userUID);
-        Task<EmployeeDetailModel> GetDetail(Guid id);
+        Guid? CheckUser(string email, string userUID);
+        EmployeeDetailModel GetDetail(Guid id);
+        Employee GetById(Guid employeeId);
+        Guid? CheckUser(string email, string userUID);
     }
 }

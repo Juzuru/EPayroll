@@ -28,4 +28,16 @@ namespace EPayroll.ServiceModels
         public SalaryModeServiceViewModel SalaryMode { get; set; }
         public SalaryLevelServiceViewModel SalaryLevel { get; set; }
     }
+    public class EmployeeServiceViewModel
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public PositionServiceModel Position { get; set; }
+    }
+
+    public class EmployeeSendFCMTokenModel
+    {
+        public string FCMToken { get; set; }
+        public Guid EmployeeId { get; set; }
+    }
 }

@@ -13,7 +13,7 @@ namespace EPayroll.Services
         private HttpClient httpClient;
         private HttpResponseMessage response;
 
-        public async Task<TResult> GetAsync<TResult>(string uri)
+        public TResult Get<TResult>(string uri)
         {
             try
             {
@@ -23,10 +23,8 @@ namespace EPayroll.Services
 
                     using (response = httpClient.GetAsync(new Uri(uri)).GetAwaiter().GetResult())
                     {
-                        return await Task.Factory.StartNew(()=> {
-                            string content = response.Content.ReadAsStringAsync().Result;
-                            return JsonConvert.DeserializeObject<TResult>(content); 
-                        });
+                        string content = response.Content.ReadAsStringAsync().Result;
+                        return JsonConvert.DeserializeObject<TResult>(content);
                     }
                 }
             }
@@ -36,7 +34,7 @@ namespace EPayroll.Services
             }
         }
 
-        public async Task<TResult> PostAsync<TResult>(string uri, object dataModel)
+        public TResult Post<TResult>(string uri, object dataModel)
         {
             try
             {
@@ -49,10 +47,8 @@ namespace EPayroll.Services
 
                     using (response = httpClient.PostAsync(new Uri(uri), stringContent).GetAwaiter().GetResult())
                     {
-                        return await Task.Factory.StartNew(() => {
-                            string content = response.Content.ReadAsStringAsync().Result;
-                            return JsonConvert.DeserializeObject<TResult>(content);
-                        });
+                        string content = response.Content.ReadAsStringAsync().Result;
+                        return JsonConvert.DeserializeObject<TResult>(content);
                     }
                 }
             }
@@ -62,7 +58,7 @@ namespace EPayroll.Services
             }
         }
 
-        public async Task<TResult> PutAsync<TResult>(string uri, object dataModel)
+        public TResult Put<TResult>(string uri, object dataModel)
         {
             try
             {
@@ -75,10 +71,8 @@ namespace EPayroll.Services
 
                     using (response = httpClient.PutAsync(new Uri(uri), stringContent).GetAwaiter().GetResult())
                     {
-                        return await Task.Factory.StartNew(() => {
-                            string content = response.Content.ReadAsStringAsync().Result;
-                            return JsonConvert.DeserializeObject<TResult>(content);
-                        });
+                        string content = response.Content.ReadAsStringAsync().Result;
+                        return JsonConvert.DeserializeObject<TResult>(content);
                     }
                 }
             }
@@ -88,7 +82,7 @@ namespace EPayroll.Services
             }
         }
 
-        public async Task<TResult> DeleteAsync<TResult>(string uri, object dataModel)
+        public TResult Delete<TResult>(string uri)
         {
             try
             {
@@ -98,10 +92,8 @@ namespace EPayroll.Services
 
                     using (var response = httpClient.DeleteAsync(new Uri(uri)).GetAwaiter().GetResult())
                     {
-                        return await Task.Factory.StartNew(() => {
-                            string content = response.Content.ReadAsStringAsync().Result;
-                            return JsonConvert.DeserializeObject<TResult>(content);
-                        });
+                        string content = response.Content.ReadAsStringAsync().Result;
+                        return JsonConvert.DeserializeObject<TResult>(content);
                     }
                 }
             }
@@ -114,9 +106,9 @@ namespace EPayroll.Services
 
     public interface IRequestService
     {
-        Task<TResult> GetAsync<TResult>(string uri);
-        Task<TResult> PostAsync<TResult>(string uri, object dataModel);
-        Task<TResult> PutAsync<TResult>(string uri, object dataModel);
-        Task<TResult> DeleteAsync<TResult>(string uri, object dataModel);
+        TResult Get<TResult>(string uri);
+        TResult Post<TResult>(string uri, object dataModel);
+        TResult Put<TResult>(string uri, object dataModel);
+        TResult Delete<TResult>(string uri);
     }
 }

@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="EPayroll.Views.PayslipDetailView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+    x:Name="PayslipDetail"
+    prism:ViewModelLocator.AutowireViewModel="True"
+    mc:Ignorable="d">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Order="Secondary"
+            Priority="0"
+            Text="Thông tin cá nhân" />
+        <ToolbarItem
+            Order="Secondary"
+            Priority="1"
+            Text="Logout" />
+    </ContentPage.ToolbarItems>
+
+    <NavigationPage.TitleView>
+        <Label
+            FontSize="23"
+            HorizontalOptions="Center"
+            Text="Phiếu lương     "
+            TextColor="White"
+            VerticalTextAlignment="Center" />
+    </NavigationPage.TitleView>
+
+    <ContentPage.Content>
+        <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout Margin="10,10,10,0" Orientation="Vertical">
+                <RelativeLayout>
+                    <StackLayout Orientation="Vertical">
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout Orientation="Vertical">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="{StaticResource TextNormal}"
+                                    Text="Tên NV: "
+                                    TextColor="Black" />
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="{StaticResource TextNormal}"
+                                    Text="Mã NV: "
+                                    TextColor="Black" />
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="{StaticResource TextNormal}"
+                                    Text="Vị trí: "
+                                    TextColor="Black" />
+                            </StackLayout>
+                            <StackLayout Orientation="Vertical">
+                                <Label
+                                    FontSize="{StaticResource TextNormal}"
+                                    Text="{Binding Employee.Name}"
+                                    TextColor="Black" />
+                                <Label
+                                    FontSize="{StaticResource TextNormal}"
+                                    Text="{Binding Employee.EmployeeCode}"
+                                    TextColor="Black" />
+                                <Label
+                                    FontSize="{StaticResource TextNormal}"
+                                    Text="{Binding Employee.Position}"
+                                    TextColor="Black" />
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout BackgroundColor="{StaticResource Gray}">
+                            <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                                <Label
+                                    Margin="0,-3,0,-7"
+                                    FontSize="60"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding Payslip.Amount, Converter={StaticResource TextConverter}}"
+                                    TextColor="{StaticResource DensityMainColor}" />
+                                <StackLayout Orientation="Horizontal">
+                                    <StackLayout Orientation="Vertical">
+                                        <Label
+                                            FontSize="{StaticResource TextNormal}"
+                                            Text="Kì lương: "
+                                            TextColor="Black" />
+                                        <Label
+                                            FontSize="{StaticResource TextNormal}"
+                                            Text="Ngày trả: "
+                                            TextColor="Black" />
+                                    </StackLayout>
+                                    <StackLayout Orientation="Vertical">
+                                        <Label
+                                            FontSize="{StaticResource TextNormal}"
+                                            Text="{Binding PayPeriod.Period}"
+                                            TextColor="Black" />
+                                        <Label
+                                            Margin="0,0,0,10"
+                                            FontSize="{StaticResource TextNormal}"
+                                            Text="{Binding PayPeriod.PayDate}"
+                                            TextColor="Black" />
+                                    </StackLayout>
+                                </StackLayout>
+                            </StackLayout>
+                        </StackLayout>
+                        <Grid BackgroundColor="{StaticResource DensityMainColor}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="45" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.4*" />
+                                <ColumnDefinition Width="0.18*" />
+                                <ColumnDefinition Width="0.18*" />
+                                <ColumnDefinition Width="0.24*" />
+                            </Grid.ColumnDefinitions>
+                            <StackLayout Grid.Column="1" Orientation="Vertical">
+                                <Label
+                                    Margin="0,0,0,-6"
+                                    HorizontalTextAlignment="Center"
+                                    Text="Số lượng"
+                                    TextColor="White" />
+                            </StackLayout>
+                            <StackLayout Grid.Column="2" Orientation="Vertical">
+                                <Label
+                                    Margin="0,0,0,-6"
+                                    HorizontalTextAlignment="Center"
+                                    Text="Đơn giá"
+                                    TextColor="White" />
+                                <Label
+                                    HorizontalTextAlignment="Center"
+                                    Text="(VNĐ)"
+                                    TextColor="White" />
+                            </StackLayout>
+                            <StackLayout Grid.Column="3" Orientation="Vertical">
+                                <Label
+                                    Margin="0,0,0,-6"
+                                    HorizontalTextAlignment="Center"
+                                    Text="Thành tiền"
+                                    TextColor="White" />
+                                <Label
+                                    HorizontalTextAlignment="Center"
+                                    Text="(VNĐ)"
+                                    TextColor="White" />
+                            </StackLayout>
+                        </Grid>
+                        <StackLayout BindableLayout.ItemsSource="{Binding PayItems}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Padding="10,3,10,3" BackgroundColor="{Binding OrdinalNumber, Converter={StaticResource BackGroundColorConverter}}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="35" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0.4*" />
+                                            <ColumnDefinition Width="0.18*" />
+                                            <ColumnDefinition Width="0.18*" />
+                                            <ColumnDefinition Width="0.24*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label
+                                            FontAttributes="{Binding OrdinalNumber, Converter={StaticResource FontAttributesConverter}}"
+                                            FontSize="{StaticResource TextNormal}"
+                                            HorizontalTextAlignment="{Binding OrdinalNumber}"
+                                            Text="{Binding PayTypeName}"
+                                            TextColor="{Binding OrdinalNumber, Converter={StaticResource TextColorConverter}}"
+                                            VerticalTextAlignment="Center" />
+                                        <Label
+                                            Grid.Column="1"
+                                            FontSize="{StaticResource TextNormal}"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding TotalHour, Converter={StaticResource TextConverter}}"
+                                            TextColor="{Binding OrdinalNumber, Converter={StaticResource TextColorConverter}}"
+                                            VerticalTextAlignment="Center" />
+                                        <Label
+                                            Grid.Column="2"
+                                            FontSize="{StaticResource TextNormal}"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding HourRate, Converter={StaticResource TextConverter}}"
+                                            TextColor="Black"
+                                            VerticalTextAlignment="Center" />
+                                        <Label
+                                            Grid.Column="3"
+                                            FontSize="{StaticResource TextNormal}"
+                                            HorizontalTextAlignment="End"
+                                            Text="{Binding Amount, Converter={StaticResource TextConverter}}"
+                                            TextColor="{Binding OrdinalNumber, Converter={StaticResource TextColorConverter}}"
+                                            VerticalTextAlignment="Center" />
+                                    </Grid>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </StackLayout>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="60" />
+                                <RowDefinition Height="30" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.5*" />
+                                <ColumnDefinition Width="0.5*" />
+                            </Grid.ColumnDefinitions>
+                            <Button
+                                Margin="20,0,20,0"
+                                BackgroundColor="Red"
+                                Command="{Binding UnacceptCommand}"
+                                FontSize="20"
+                                IsVisible="{Binding IsWaiting}"
+                                Text="Từ chối"
+                                TextColor="White"
+                                VerticalOptions="End" />
+                            <Label
+                                Grid.ColumnSpan="2"
+                                Margin="20,0,20,0"
+                                FontSize="20"
+                                HorizontalTextAlignment="Center"
+                                IsVisible="{Binding IsUnaccept}"
+                                Text="Đã từ chối"
+                                TextColor="Red"
+                                VerticalOptions="End" />
+                            <Button
+                                Grid.Column="1"
+                                Margin="20,0,20,0"
+                                BackgroundColor="Green"
+                                Command="{Binding AcceptCommand}"
+                                FontSize="20"
+                                IsVisible="{Binding IsWaiting}"
+                                Text="Chấp nhận"
+                                TextColor="White"
+                                VerticalOptions="End" />
+                            <Label
+                                Grid.ColumnSpan="2"
+                                Margin="20,0,20,0"
+                                FontSize="20"
+                                HorizontalTextAlignment="Center"
+                                IsVisible="{Binding IsAccept}"
+                                Text="Đã chấp nhận"
+                                TextColor="Green"
+                                VerticalOptions="End" />
+                        </Grid>
+                    </StackLayout>
+                    <StackLayout
+                        BackgroundColor="Black"
+                        IsVisible="{Binding IsLoading}"
+                        Opacity="{Binding Opacity}"
+                        RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,
+                                                                               Property=Height,
+                                                                               Factor=1,
+                                                                               Constant=0}"
+                        RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,
+                                                                              Property=Width,
+                                                                              Factor=1,
+                                                                              Constant=0}">
+                        <ActivityIndicator
+                            HorizontalOptions="Center"
+                            IsRunning="{Binding IsLoading}"
+                            IsVisible="{Binding IsLoading}"
+                            VerticalOptions="CenterAndExpand" />
+                    </StackLayout>
+                </RelativeLayout>
+            </StackLayout>
+        </ScrollView>
+
+    </ContentPage.Content>
+</ContentPage>

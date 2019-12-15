@@ -3,15 +3,30 @@
     x:Class="EPayroll.App"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converter="clr-namespace:EPayroll.Converters"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="clr-namespace:Prism.DryIoc;assembly=Prism.DryIoc.Forms"
     mc:Ignorable="d">
 
     <Application.Resources>
+        <Style TargetType="NavigationPage">
+            <Setter Property="BarBackgroundColor" Value="#00a08d" />
+            <Setter Property="BarTextColor" Value="#000000" />
+        </Style>
         <ResourceDictionary>
             <!--  MainColor RGB:69, 190, 171  -->
             <Color x:Key="MainColor">#45beab</Color>
+            <Color x:Key="DensityMainColor">#00a08d</Color>
+            <Color x:Key="Gray">#C8C8C8</Color>
+
+            <x:Double x:Key="TextNormal">15</x:Double>
+
+            <converter:BackGroundColorConverter x:Key="BackGroundColorConverter" />
+            <converter:FontAttributesConverter x:Key="FontAttributesConverter" />
+            <converter:HorizontalTextAlignmentConverter x:Key="HorizontalTextAlignmentConverter" />
+            <converter:TextColorConverter x:Key="TextColorConverter" />
+            <converter:TextConverter x:Key="TextConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </prism:PrismApplication>
