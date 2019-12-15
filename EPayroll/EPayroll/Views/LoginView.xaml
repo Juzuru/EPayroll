@@ -10,31 +10,62 @@
     mc:Ignorable="d">
 
     <ContentPage.Content>
-        <StackLayout
-            Margin="5"
-            Orientation="Vertical"
-            VerticalOptions="Center">
+        <RelativeLayout>
+            <StackLayout
+                Margin="5"
+                Orientation="Vertical"
+                RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,
+                                                                       Property=Height,
+                                                                       Factor=1,
+                                                                       Constant=0}"
+                RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,
+                                                                      Property=Width,
+                                                                      Factor=1,
+                                                                      Constant=0}"
+                VerticalOptions="Center">
 
-            <Image
-                HeightRequest="200"
-                Source="{Binding LogoLogin}"
-                WidthRequest="200" />
-            <Entry
-                Placeholder="Email"
-                Text="{Binding Email}"
-                TextColor="Black" />
-            <Entry
-                IsPassword="True"
-                Placeholder="Mật khẩu"
-                Text="{Binding Password}"
-                TextColor="Black" />
-            <Label Text="{Binding LoginErrorMessage}" TextColor="Red" />
-            <Button
-                BackgroundColor="{StaticResource MainColor}"
-                Command="{Binding LoginCommand}"
-                FontSize="Medium"
-                Text="Đăng nhập"
-                TextColor="White" />
-        </StackLayout>
+                <Image
+                    HeightRequest="200"
+                    Source="{Binding LogoLogin}"
+                    WidthRequest="200" />
+                <Entry
+                    Margin="30,50,30,0"
+                    Placeholder="Email"
+                    Text="{Binding Email}"
+                    TextColor="Black" />
+                <Entry
+                    Margin="30,0,30,0"
+                    IsPassword="True"
+                    Placeholder="Mật khẩu"
+                    Text="{Binding Password}"
+                    TextColor="Black" />
+                <Label Text="{Binding LoginErrorMessage}" TextColor="Red" />
+                <Button
+                    Margin="30,50,30,0"
+                    BackgroundColor="{StaticResource MainColor}"
+                    Command="{Binding LoginCommand}"
+                    FontSize="Medium"
+                    Text="Đăng nhập"
+                    TextColor="White" />
+            </StackLayout>
+            <StackLayout
+                BackgroundColor="Black"
+                IsVisible="{Binding IsLoading}"
+                Opacity="{Binding Opacity}"
+                RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,
+                                                                       Property=Height,
+                                                                       Factor=1,
+                                                                       Constant=0}"
+                RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,
+                                                                      Property=Width,
+                                                                      Factor=1,
+                                                                      Constant=0}">
+                <ActivityIndicator
+                    HorizontalOptions="Center"
+                    IsRunning="{Binding IsLoading}"
+                    IsVisible="{Binding IsLoading}"
+                    VerticalOptions="CenterAndExpand" />
+            </StackLayout>
+        </RelativeLayout>
     </ContentPage.Content>
 </ContentPage>

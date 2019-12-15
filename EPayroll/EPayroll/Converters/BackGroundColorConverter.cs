@@ -10,8 +10,7 @@ namespace EPayroll.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((int)value < 0)
-                return "#45beab";
+            if ((int)value == -1) return "#45beab";
             return (int)value % 2 == 0 ? "#C8C8C8" : "#FFFFFF";
         }
 

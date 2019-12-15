@@ -11,28 +11,21 @@ namespace EPayroll.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null) return "";
-            if (value is int)
+
+            string result = "";
+            if (value is int) result = ((int)value).ToString();
+            else if (value is long) result = ((long)value).ToString();
+
+            if (result.Equals("0")) return "-";
+            if (result.Equals("-1")) return "";
+            if (result.Equals("-2")) return "(Giờ)";
+            if (result.Equals("-3")) return "(Lần)";
+
+            for (int i = result.Length - 3; i > 0; i -= 3)
             {
-                if ((int)value == -10) return "STT";
-                else return (int)value;
-            }
-            if (value is float)
-            {
-                if ((float)value == -11) return "Số tiền";
+                result = result.Insert(i, ".");
             }
 
-            float number = (float)value;
-            float reminder = number % 1000;
-            string result = reminder == 0 ? reminder.ToString() + "00" : reminder.ToString();
-            number = (number - reminder) / 1000;
-
-            while (number > 999)
-            {
-                reminder = number % 1000;
-                result = reminder.ToString() + "." + result;
-                number = (number - reminder) / 1000;
-            }
-            result = number.ToString() + "." + result;
 
             return result;
         }

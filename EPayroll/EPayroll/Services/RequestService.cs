@@ -82,7 +82,7 @@ namespace EPayroll.Services
             }
         }
 
-        public TResult Delete<TResult>(string uri, object dataModel)
+        public TResult Delete<TResult>(string uri)
         {
             try
             {
@@ -109,6 +109,6 @@ namespace EPayroll.Services
         TResult Get<TResult>(string uri);
         TResult Post<TResult>(string uri, object dataModel);
         TResult Put<TResult>(string uri, object dataModel);
-        TResult Delete<TResult>(string uri, object dataModel);
+        TResult Delete<TResult>(string uri);
     }
 }

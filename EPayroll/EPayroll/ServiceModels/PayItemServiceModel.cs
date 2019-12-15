@@ -6,9 +6,9 @@ namespace EPayroll.ServiceModels
 {
     public class PayItemServiceModel
     {
-        public float Amount { get; set; }
+        public long Amount { get; set; }
         public int TotalHour { get; set; }
-        public float HourRate { get; set; }
+        public long HourRate { get; set; }
         public string PayTypeName { get; set; }
     }
 

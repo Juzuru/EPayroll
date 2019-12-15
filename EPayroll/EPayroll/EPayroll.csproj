@@ -6,19 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Images\LogoApp.png" />
-    <None Remove="Images\LogoStart.png" />
+    <None Remove="Images\AppIcon.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Images\LogoStart.png" />
-    <EmbeddedResource Include="Images\LogoApp.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Images\AppIcon.png" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Nancy" Version="2.0.0" />
+    <PackageReference Include="Plugin.FirebasePushNotification" Version="2.3.6" />
     <PackageReference Include="Prism.DryIoc.Forms" Version="7.2.0.1422" />
     <PackageReference Include="Prism.Forms" Version="7.2.0.1422" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.1-rc.170" />

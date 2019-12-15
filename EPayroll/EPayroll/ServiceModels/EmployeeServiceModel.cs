@@ -23,4 +23,10 @@ namespace EPayroll.ServiceModels
         public string Name { get; set; }
         public PositionServiceModel Position { get; set; }
     }
+
+    public class EmployeeSendFCMTokenModel
+    {
+        public string FCMToken { get; set; }
+        public Guid EmployeeId { get; set; }
+    }
 }

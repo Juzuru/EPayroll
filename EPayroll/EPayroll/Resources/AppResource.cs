@@ -6,7 +6,8 @@ namespace EPayroll.Resources
 {
     public class AppResource
     {
-        private static IDictionary<string, object> Dictionary = new Dictionary<string, object>();
+        private static readonly IDictionary<string, object> Dictionary = new Dictionary<string, object>();
+
         public static bool Add<TValue>(string key, TValue value)
         {
             try

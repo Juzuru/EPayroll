@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -22,19 +23,16 @@ namespace EPayroll.ViewModels
         }
 
         #region Previous Values
-        private bool _isLoading = true;
         private Employee _employee;
         private PayPeriod _payPeriod;
-        private float _amount;
+        private Payslip _payslip;
         private ObservableCollection<PayItem> _payItems;
+        private bool _isAccept;
+        private bool _isUnaccept;
+        private bool _isWaiting;
         #endregion
 
         #region Binding Values
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set => SetValue(ref _isLoading, value);
-        }
         public Employee Employee
         {
             get => _employee;
@@ -45,43 +43,108 @@ namespace EPayroll.ViewModels
             get => _payPeriod;
             set => SetValue(ref _payPeriod, value);
         }
-        public float Amount
+        public Payslip Payslip
         {
-            get => _amount;
-            set => SetValue(ref _amount, value);
+            get => _payslip;
+            set => SetValue(ref _payslip, value);
         }
         public ObservableCollection<PayItem> PayItems
         {
             get => _payItems;
             set => SetValue(ref _payItems, value);
         }
+        public bool IsAccept
+        {
+            get => _isAccept;
+            set => SetValue(ref _isAccept, value);
+        }
+        public bool IsUnaccept
+        {
+            get => _isUnaccept;
+            set => SetValue(ref _isUnaccept, value);
+        }
+        public bool IsWaiting
+        {
+            get => _isWaiting;
+            set => SetValue(ref _isWaiting, value);
+        }
         #endregion
 
-        private PayslipDetail payslipDetail;
+        #region Command
+        public Command UnacceptCommand
+        {
+            get => new Command(() =>
+            {
+                IsAccept = false;
+                IsUnaccept = true;
+                IsWaiting = false;
+                _isConfirmed = true;
+                _payslipService.Confirm(Payslip.Id, false);
+            });
+        }
+        public Command AcceptCommand
+        {
+            get => new Command(() =>
+            {
+                IsAccept = true;
+                IsUnaccept = false;
+                IsWaiting = false;
+                _isConfirmed = true;
+                _payslipService.Confirm(Payslip.Id, true);
+            });
+        }
+        #endregion
+
+        private bool _isConfirmed = false;
+
         public override void OnAppearing()
         {
-            Employee = AppResource.Get<Employee>(ParameterName.Employee);
+            IsLoading = true;
 
-            Guid payslipId = AppResource.Get<Guid>(ParameterName.PayslipId);
-            if (AppResource.Get(payslipId.ToString(), out PayslipDetail value))
+            Employee = AppResource.Get<Employee>(ParameterName.Employee);
+            PayslipDetail payslipDetail;
+            Payslip = AppResource.Get<Payslip>(ParameterName.PayslipId);
+            if (AppResource.Get(Payslip.Id.ToString(), out PayslipDetail value))
             {
-                Amount = value.Amount;
-                PayPeriod = value.PayPeriod;
-                PayItems = value.PayItems;
+                payslipDetail = value;
             }
             else
             {
-                payslipDetail = _payslipService.GetDetail(payslipId);
-
-                Amount = payslipDetail.Amount;
-                PayItems = payslipDetail.PayItems;
-                PayPeriod = payslipDetail.PayPeriod;
+                payslipDetail = _payslipService.GetDetail(Payslip.Id);
+                AppResource.Add(Payslip.Id.ToString(), payslipDetail);
             }
+            PayItems = payslipDetail.PayItems;
+            PayPeriod = payslipDetail.PayPeriod;
+
+            if (Payslip.Status.Equals("Chấp nhận"))
+            {
+                IsAccept = true;
+                IsUnaccept = false;
+                IsWaiting = false;
+            }
+            else if (Payslip.Status.Equals("Từ chối"))
+            {
+                IsAccept = false;
+                IsUnaccept = true;
+                IsWaiting = false;
+            }
+            else
+            {
+                IsAccept = false;
+                IsUnaccept = false;
+                IsWaiting = true;
+            }
+
+            IsLoading = false;
         }
 
-        public override void OnDisappearing()
+        public override void OnNavigatedFrom(INavigationParameters parameters)
         {
-            AppResource.Add(ParameterName.PayslipId, payslipDetail);
+            if (_isConfirmed)
+            {
+                parameters.Add(ParameterName.Accepted, IsAccept);
+                parameters.Add(ParameterName.PayslipId, Payslip.Id);
+            }
         }
     }
 }

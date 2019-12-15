@@ -9,6 +9,8 @@ using SkiaSharp.Views.Forms;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Xamarin.Auth;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -18,15 +20,18 @@ namespace EPayroll.ViewModels
     public class LoginViewModel : ViewModelBase
     {
         private readonly IEmployeeService _employeeService;
+        private readonly IPayslipService _payslipService;
+        private readonly IFirebaseService _firebaseService;
 
-        public LoginViewModel(IEmployeeService employeeService, INavigationService _navigationService) : base (_navigationService)
+        public LoginViewModel(IEmployeeService employeeService, IPayslipService payslipService, IFirebaseService firebaseService, INavigationService navigationService) : base(navigationService)
         {
             _employeeService = employeeService;
+            _payslipService = payslipService;
+            _firebaseService = firebaseService;
 
-            _email = "toanldse63050@fpt.edu.vn";
-            _password = "toanld";
+            Email = "toanldse63050@fpt.edu.vn";
+            Password = "toanld";
         }
-
 
         #region Previous Values
         private string _loginErrorMessage;
@@ -52,7 +57,7 @@ namespace EPayroll.ViewModels
         }
         public ImageSource LogoLogin
         {
-            get => ImageSource.FromResource("EPayroll.Images.LogoApp.png");
+            get => ImageSource.FromResource("EPayroll.Images.AppIcon.png");
         }
         #endregion
 
@@ -63,6 +68,19 @@ namespace EPayroll.ViewModels
             {
                 return new Command(async () =>
                 {
+                    if (_isLoading) return;
+                    IsLoading = true;
+
+                    await Task.Run(() =>
+                    {
+                        Opacity = 0;
+                        while (Opacity <= 1)
+                        {
+                            Thread.Sleep(50);
+                            Opacity += 0.1;
+                        }
+                    });
+
                     if (string.IsNullOrEmpty(Email))
                     {
                         LoginErrorMessage = "Email không được để trống";
@@ -86,7 +104,10 @@ namespace EPayroll.ViewModels
                                     employee.UserUID = userUID;
                                     employee.Email = Email;
                                     employee.EmployeeCode = Email.Substring(0, Email.IndexOf("@"));
+
+                                    _firebaseService.SendFCMToken(employee.Id, AppResource.Get<string>(ParameterName.FCMToken));
                                     AppResource.Add(ParameterName.Employee, employee);
+                                    AppResource.Add(ParameterName.ListPayslip, _payslipService.GetAll(employee.Id));
 
                                     await _navigationService.NavigateAsync("EPayroll:///" + PageName.Navigation + "/" + PageName.ListPayslip);
                                 }
@@ -114,6 +135,16 @@ namespace EPayroll.ViewModels
         {
             //Email = AppResource.Get<string>(ParameterName.Email);
             //Password = AppResource.Get<string>(ParameterName.Password);
+            Task.Run(() =>
+            {
+                Opacity = 1;
+                while (Opacity >= 0)
+                {
+                    Thread.Sleep(50);
+                    Opacity -= 0.1;
+                }
+            });
+            IsLoading = false;
         }
 
         public override void OnDisappearing()

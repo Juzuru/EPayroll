@@ -10,13 +10,16 @@ namespace EPayroll.Models
         public Guid Id { get; set; }
         public string PaySlipCode { get; set; }
         public int OrdinalNumber { get; set; }
-        public float Amount { get; set; }
+        public long Amount { get; set; }
         public string Status { get; set; }
+
+        public PayPeriod PayPeriod { get; set; }
     }
 
     public class PayslipDetail
     {
-        public float Amount { get; set; }
+        public Guid Id { get; set; }
+        public long Amount { get; set; }
         public PayPeriod PayPeriod { get; set; }
         public ObservableCollection<PayItem> PayItems { get; set; }
     }

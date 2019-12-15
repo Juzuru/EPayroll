@@ -13,5 +13,7 @@ namespace EPayroll.Resources
         public static string Password = "Password";
         public static string ListPayslip = "ListPayslip";
         public static string PayPeriod = "PayPeriod";
+        public static string FCMToken = "FCMToken";
+        public static string Accepted = "Accepted";
     }
 }

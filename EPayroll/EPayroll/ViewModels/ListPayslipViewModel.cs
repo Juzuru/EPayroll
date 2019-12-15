@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -22,34 +23,10 @@ namespace EPayroll.ViewModels
         }
 
         #region Previous Properties
-        private bool _isLoading = true;
-        private Payslip _selectedPayslip;
         private ObservableCollection<Payslip> _payslips;
         #endregion
 
         #region Binding Properties
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set => SetValue(ref _isLoading, value);
-        }
-        public Payslip SelectedPayslip
-        {
-            get => _selectedPayslip;
-            set
-            {
-                _selectedPayslip = value;
-
-                if (_selectedPayslip.OrdinalNumber == -10)
-                    _selectedPayslip = _payslips[_payslips.Count - 2];
-                else _selectedPayslip = _payslips[_selectedPayslip.OrdinalNumber - 2];
-                
-                AppResource.Replace(ParameterName.PayslipId, _selectedPayslip.Id);
-                SetValue(ref _selectedPayslip, null);
-
-                _navigationService.NavigateAsync(PageName.PayslipDetail);
-            }
-        }
         public ObservableCollection<Payslip> Payslips
         {
             get => _payslips;
@@ -57,8 +34,34 @@ namespace EPayroll.ViewModels
         }
         #endregion
 
+        public Command TapPayslipCommand
+        {
+            get => new Command<int>(async (odinalNumber) =>
+            {
+                if (_isLoading) return;
+                IsLoading = true;
+                await Task.Run(() =>
+                {
+                    Opacity = 0;
+                    while (Opacity <= 1)
+                    {
+                        Thread.Sleep(50);
+                        Opacity += 0.1;
+                    }
+                });
+
+                Payslip payslip = _payslips[odinalNumber - 1];
+
+                AppResource.Replace(ParameterName.PayslipId, payslip);
+                AppResource.Replace(payslip.Id.ToString(), _payslipService.GetDetail(payslip.Id));
+                await _navigationService.NavigateAsync(PageName.PayslipDetail);
+            });
+        }
+
         public override void OnAppearing()
         {
+            IsLoading = true;
+
             if (AppResource.Get(ParameterName.ListPayslip, out ObservableCollection<Payslip> value))
             {
                 Payslips = value;
@@ -66,23 +69,39 @@ namespace EPayroll.ViewModels
             else
             {
                 Guid employeeId = AppResource.Get<Employee>(ParameterName.Employee).Id;
-                
                 var list = _payslipService.GetAll(employeeId);
-                list.Add(new Payslip
-                {
-                    OrdinalNumber = -10,
-                    PaySlipCode = "Kì lương",
-                    Amount = -11,
-                    Status = "Trạng thái"
-                });
-
                 Payslips = list;
             }
+
+            IsLoading = false;
         }
 
         public override void OnDisappearing()
         {
             AppResource.Add(ParameterName.ListPayslip, _payslips);
+        }
+
+        public override void OnNavigatedTo(INavigationParameters parameters)
+        {
+            var payslipId = (Guid?)parameters[ParameterName.PayslipId];
+            var isAccepted = (bool?)parameters[ParameterName.Accepted];
+
+            Payslip payslip;
+            if (payslipId != null)
+            {
+                for (int i = 0; i < _payslips.Count; i++)
+                {
+                    payslip = _payslips[i];
+                    if (payslipId.Equals(payslip.Id))
+                    {
+                        if (isAccepted == true)
+                            _payslips[i].Status = "Chấp nhận";
+                        else _payslips[i].Status = "Từ chối";
+                        Payslips = new ObservableCollection<Payslip>(_payslips);
+                        break;
+                    }
+                }
+            }
         }
     }
 }

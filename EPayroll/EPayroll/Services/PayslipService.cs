@@ -31,16 +31,20 @@ namespace EPayroll.Services
                 for (int i = 0; i < list.Count; i++)
                 {
                     status = list[i].Status;
-                    if (status.Equals("Paid")) status = "Đã trả";
-                    else if (status.Equals("Unpaid")) status = "Chưa trả";
-                    else status = "Đang xử lí";
+                    if (status.Equals("Accepted")) status = "Chấp nhận";
+                    else if (status.Equals("Unaccepted")) status = "Từ chối";
+                    else status = "Cần xác minh";
 
                     result.Add(new Payslip { 
                         Amount = list[i].Amount,
                         Id = list[i].Id,
                         OrdinalNumber = i + 1,
                         Status = status,
-                        PaySlipCode = list[i].PaySlipCode
+                        PaySlipCode = list[i].PaySlipCode,
+                        PayPeriod = new PayPeriod
+                        {
+                            Name = list[i].PayPeriod.Name
+                        }
                     });
                 }
 
@@ -56,12 +60,19 @@ namespace EPayroll.Services
 
             ObservableCollection<PayItem> payItems = new ObservableCollection<PayItem>();
             PayItemServiceModel payItemServiceModel;
+            int subHeaderPosition = 0;
+            long subTotalAmount;
+            int n = -2;
             for (int i = 0; i < model.GroupPayItems.Count; i++)
             {
+                subTotalAmount = 0;
+
                 payItems.Add(new PayItem
                 {
                     PayTypeName = model.GroupPayItems[i].PayTypeCategoryName,
-                    OrdinalNumber = -1
+                    OrdinalNumber = -1,
+                    HourRate = -1,
+                    TotalHour = n
                 });
                 for (int j = 0; j < model.GroupPayItems[i].PayItems.Count; j++)
                 {
@@ -74,7 +85,12 @@ namespace EPayroll.Services
                         PayTypeName = payItemServiceModel.PayTypeName,
                         TotalHour = payItemServiceModel.TotalHour
                     });
+                    subTotalAmount += payItemServiceModel.Amount;
                 }
+
+                payItems[subHeaderPosition].Amount = subTotalAmount;
+                subHeaderPosition += model.GroupPayItems[i].PayItems.Count + 1;
+                n--;
             }
 
             return new PayslipDetail 
@@ -86,8 +102,26 @@ namespace EPayroll.Services
                     Period = model.PayPeriod.EndDate.ToString("dd/MM/yyyy") + " - " + model.PayPeriod.StartDate.ToString("dd/MM/yyyy")
                 },
                 PayItems = payItems,
-                Amount = model.Amount
+                Amount = model.Amount,
+                Id = payslipId
             };
+        }
+
+        public bool Confirm(Guid payslipId, bool accepted)
+        {
+            try
+            {
+                _requestService.Post<string>(base_uri + "/confirm", new PayslipConfirmServiceModel
+                {
+                    Accepted = accepted,
+                    Id = payslipId
+                });
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 
@@ -95,5 +129,6 @@ namespace EPayroll.Services
     {
         ObservableCollection<Payslip> GetAll(Guid employeeId);
         PayslipDetail GetDetail(Guid payslipId);
+        bool Confirm(Guid payslipId, bool accepted);
     }
 }
